@@ -125,8 +125,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 /* PUBLISHED WORK */
 #work{padding:100px 60px;max-width:1200px;margin:0 auto}
 .audio-section h3{font-family:var(--sans);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--text-1);font-weight:600;margin-bottom:24px;padding-bottom:8px;border-bottom:1px solid var(--border)}
-.audio-tracks{display:flex;flex-direction:column;gap:16px;align-items:center}
-.audio-track{display:flex;align-items:center;gap:16px;padding:12px 0;transition:var(--transition)}
+.audio-tracks{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:start}
+.audio-track{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 8px;transition:var(--transition);text-align:center}
 .audio-track:hover .audio-name{color:var(--gold)}
 .audio-icon{width:48px;height:48px;border-radius:50%;background:var(--bg-3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--transition);cursor:pointer;position:relative}
 .audio-icon::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid transparent;transition:var(--transition)}
@@ -135,7 +135,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .audio-icon svg{width:18px;height:18px;fill:var(--gold)}
 .audio-icon.playing{animation:glow-pulse 1.5s ease-in-out infinite}
 @keyframes glow-pulse{0%,100%{box-shadow:0 0 8px rgba(251,191,36,0.3)}50%{box-shadow:0 0 24px rgba(251,191,36,0.6)}}
-.audio-info{flex:1;min-width:0}
+.audio-info{min-width:0;text-align:center}
 .audio-name{font-family:var(--mono);font-size:12px;color:var(--text-2);margin-bottom:2px;transition:var(--transition)}
 .audio-meta{font-size:10px;color:var(--text-4)}
 .audio-player audio{display:none}
@@ -217,6 +217,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
   #builds-teaser,#work,#experience,#contact{padding:60px 24px}
   #foundation,#stack{padding:60px 24px}
   .teaser-grid{grid-template-columns:1fr 1fr}
+  .audio-tracks{grid-template-columns:1fr 1fr}
   .stack-grid{grid-template-columns:1fr}
   .timeline{padding-left:30px}
   footer{padding:20px 24px;flex-direction:column;gap:10px;text-align:center}
@@ -226,6 +227,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
   .hero-name{font-size:28px;letter-spacing:-1px}
   .contact-links{flex-direction:column;align-items:center}
   .teaser-grid{grid-template-columns:1fr}
+  .audio-tracks{grid-template-columns:1fr}
   .foundation-tags{gap:8px}
 }
 </style>
