@@ -163,7 +163,20 @@ All applied:
 ## Decisions Made
 
 - [x] Hero photo: #2 (Shahnam Hossain Jilan 2.png)
-- [ ] iHack Audio logo: TBD (using "iH·" monogram for now)
+- [x] iHack Audio logo: uploaded (ihack-logo.png)
 - [x] Builds page: Separate `/builds` page with zigzag layout
-- [ ] Apple Podcasts episodes to feature: TBD
-- [ ] Before/after waveform: TBD
+- [x] Apple Podcasts episodes: from Netlify site (see below)
+- [x] Before/after waveform: N/A (not available)
+
+## Podcast Episodes to Feature
+
+From ihack-audio.netlify.app:
+1. When AI Takes Over the Podcast (3:15)
+2. My AI Host Got Upset (2:08)
+3. My AI Wants to Be HUMAN (2:18)
+4. Podcast Airways — Sky Skylar (4:14)
+
+## Audiobook Samples
+1. 3D Sound Design Sample (3:13)
+2. Cinematic Pace Sample (3:38)
+3. Cinematic Story & Sound (3:50)
