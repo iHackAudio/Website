@@ -127,21 +127,21 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .work-layout{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
 .audio-section h3{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-4);margin-bottom:24px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .audio-tracks{display:flex;flex-direction:column;gap:16px}
-.audio-track{display:flex;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid rgba(30,41,59,0.4);transition:var(--transition)}
-.audio-track:hover{border-bottom-color:var(--accent)}
+.audio-track{display:flex;align-items:center;gap:16px;padding:12px 0;transition:var(--transition)}
+.audio-track:hover .audio-name{color:var(--gold)}
 .audio-icon{width:48px;height:48px;border-radius:50%;background:var(--bg-3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:var(--transition);cursor:pointer;position:relative}
 .audio-icon::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid transparent;transition:var(--transition)}
-.audio-icon:hover{border-color:var(--accent);box-shadow:var(--glow-accent)}
-.audio-icon:hover::after{border-color:rgba(56,189,248,0.2)}
-.audio-icon svg{width:18px;height:18px;fill:var(--accent)}
+.audio-icon:hover{border-color:var(--gold);box-shadow:var(--glow-gold)}
+.audio-icon:hover::after{border-color:rgba(251,191,36,0.2)}
+.audio-icon svg{width:18px;height:18px;fill:var(--gold)}
 .audio-icon.playing{animation:glow-pulse 1.5s ease-in-out infinite}
-@keyframes glow-pulse{0%,100%{box-shadow:0 0 8px rgba(56,189,248,0.3)}50%{box-shadow:0 0 24px rgba(56,189,248,0.6)}}
+@keyframes glow-pulse{0%,100%{box-shadow:0 0 8px rgba(251,191,36,0.3)}50%{box-shadow:0 0 24px rgba(251,191,36,0.6)}}
 .audio-info{flex:1;min-width:0}
-.audio-name{font-family:var(--mono);font-size:12px;color:var(--text-2);margin-bottom:2px}
+.audio-name{font-family:var(--mono);font-size:12px;color:var(--text-2);margin-bottom:2px;transition:var(--transition)
 .audio-meta{font-size:10px;color:var(--text-4)}
 .audio-player audio{display:none}
 .apple-badge{display:inline-flex;align-items:center;gap:10px;margin-top:32px;padding:14px 22px;background:var(--bg-2);border:1px solid var(--border);transition:var(--transition);cursor:pointer;text-decoration:none}
-.apple-badge:hover{border-color:var(--purple);box-shadow:var(--glow-purple);transform:translateY(-2px)}
+.apple-badge:hover{border-color:var(--gold);box-shadow:var(--glow-gold);transform:translateY(-2px)}
 .apple-badge svg{width:24px;height:24px;fill:var(--text-2)}
 .apple-badge-text{font-family:var(--mono);font-size:11px;color:var(--text-3);letter-spacing:0.5px}
 .apple-badge-text strong{color:var(--text-1);display:block;font-size:12px}
@@ -159,12 +159,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .stack-wrap{max-width:1200px;margin:0 auto}
 .stack-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:20px}
 .stack-group{margin-bottom:32px}
-.stack-group-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-4);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:14px}
+.stack-group-title{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);padding-bottom:8px;border-bottom:1px solid rgba(251,191,36,0.2);margin-bottom:14px}
 .stack-chips{display:flex;flex-wrap:wrap;gap:8px}
 .stack-chip{font-family:var(--mono);font-size:11px;padding:8px 14px;background:var(--bg-3);border:1px solid var(--border);color:var(--text-3);transition:var(--transition);cursor:default}
-.stack-chip:hover{border-color:var(--accent);color:var(--accent);box-shadow:var(--glow-accent);transform:translateY(-2px)}
+.stack-chip:hover{border-color:var(--gold);color:var(--gold);box-shadow:var(--glow-gold);transform:translateY(-2px)}
 .stack-chip.custom{border-color:rgba(124,58,237,0.3);color:#a78bfa}
-.stack-chip.custom:hover{border-color:var(--purple);box-shadow:var(--glow-purple)}
+.stack-chip.custom:hover{border-color:var(--gold);box-shadow:var(--glow-gold);color:var(--gold)}
 
 /* EXPERIENCE */
 #experience{padding:100px 60px;max-width:1200px;margin:0 auto}
@@ -408,7 +408,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
             <div class="audio-name">My AI Host Got Upset</div>
             <div class="audio-meta">2:08 · iHack Audio</div>
           </div>
-          <div class="audio-player"><audio preload="none"></audio></div>
+          <div class="audio-player"><audio preload="none" src="AUDIOCLIPS/CINEMATIC STORY & SOUND_SAMPLE.mp3"></audio></div>
         </div>
         <div class="audio-track reveal reveal-delay-2">
           <div class="audio-icon" onclick="toggleAudio(this)">
@@ -432,9 +432,19 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
             <div class="audio-name">Blink and Gone</div>
             <div class="audio-meta">Sample · Audiobook</div>
           </div>
-          <div class="audio-player"><audio preload="none" src="AUDIOCLIPS/Audiobook  Blink and Gone_SAMPLE.mp3"></audio></div>
+          <div class="audio-player"><audio preload="none" src="AUDIOCLIPS/Audiobook%20%20Blink%20and%20Gone_SAMPLE.mp3"></audio></div>
         </div>
         <div class="audio-track reveal reveal-delay-1">
+          <div class="audio-icon" onclick="toggleAudio(this)">
+            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+          </div>
+          <div class="audio-info">
+            <div class="audio-name">3D Sound Design</div>
+            <div class="audio-meta">Sample · Audiobook</div>
+          </div>
+          <div class="audio-player"><audio preload="none" src="AUDIOCLIPS/Audiobook%203D%20Sound%20design_SAMPLE.mp3"></audio></div>
+        </div>
+        <div class="audio-track reveal reveal-delay-2">
           <div class="audio-icon" onclick="toggleAudio(this)">
             <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
           </div>
@@ -442,17 +452,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
             <div class="audio-name">Cinematic Pace</div>
             <div class="audio-meta">Sample · Audiobook</div>
           </div>
-          <div class="audio-player"><audio preload="none" src="AUDIOCLIPS/Audiobook Cinematic Pace_SAMPLE.mp3"></audio></div>
-        </div>
-        <div class="audio-track reveal reveal-delay-2">
-          <div class="audio-icon" onclick="toggleAudio(this)">
-            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-          </div>
-          <div class="audio-info">
-            <div class="audio-name">Cinematic Story & Sound</div>
-            <div class="audio-meta">Sample · Sound Design</div>
-          </div>
-          <div class="audio-player"><audio preload="none" src="AUDIOCLIPS/CINEMATIC STORY & SOUND_SAMPLE.mp3"></audio></div>
+          <div class="audio-player"><audio preload="none" src="AUDIOCLIPS/Audiobook%20Cinematic%20Pace_SAMPLE.mp3"></audio></div>
         </div>
       </div>
 
