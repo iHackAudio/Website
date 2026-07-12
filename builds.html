@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What I Built — Shahnam Hossain Jilan</title>
+<meta name="description" content="Deep dive into the iHack Audio platform — 8 production modules, all built from zero.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/images/ihack-logo.png" type="image/png">
+<style>
+/* ═══════════════════════════════════════════════
+   RESET & GLOBALS
+   ═══════════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg-0:#030712;--bg-1:#060a14;--bg-2:#0a0e1a;--bg-3:#0f172a;--bg-4:#1e293b;
+  --accent:#38bdf8;--accent-dim:#0c4a6e;--purple:#7c3aed;--purple-dim:#1a0a2e;
+  --gold:#fbbf24;--gold-dim:#1a1000;--green:#4ade80;--green-dim:#052e16;
+  --red:#f87171;--text-1:#f8fafc;--text-2:#e2e8f0;--text-3:#94a3b8;--text-4:#475569;
+  --border:#1e293b;--border-accent:#1e3a5f;
+  --mono:'Space Mono',monospace;--sans:'Inter',sans-serif;
+  --transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg-1);color:var(--text-2);font-family:var(--sans);font-size:15px;line-height:1.7;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none;transition:var(--transition)}
+a:hover{color:#7dd3fc}
+::selection{background:var(--accent-dim);color:var(--accent)}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg-0)}
+::-webkit-scrollbar-thumb{background:var(--accent-dim);border-radius:2px}
+img{max-width:100%;display:block}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(6,10,20,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo img{height:28px;width:auto}
+.nav-logo span{font-family:var(--mono);font-size:13px;color:var(--text-1);letter-spacing:0.5px}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-4);transition:var(--transition)}
+.nav-links a:hover{color:var(--accent)}
+.nav-cta{font-family:var(--mono);font-size:11px;padding:8px 18px;border:1px solid var(--accent);color:var(--accent);transition:var(--transition)}
+.nav-cta:hover{background:var(--accent);color:var(--bg-0)}
+.nav-mobile{display:none;background:none;border:none;color:var(--text-2);font-size:24px;cursor:pointer}
+
+/* PAGE HEADER */
+.page-header{padding:140px 60px 80px;text-align:center;position:relative;overflow:hidden}
+.page-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(56,189,248,0.06) 0%,transparent 70%),var(--bg-0)}
+.page-header-content{position:relative;z-index:1}
+.page-header .section-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:10px}
+.page-header .section-eyebrow::before,.page-header .section-eyebrow::after{content:'';width:20px;height:1px;background:var(--accent)}
+.page-header h1{font-family:var(--mono);font-size:clamp(28px,5vw,52px);color:var(--text-1);font-weight:700;line-height:1.1;margin-bottom:16px}
+.page-header p{font-size:15px;color:var(--text-3);max-width:600px;margin:0 auto;line-height:1.8}
+
+/* ═══════════════════════════════════════════════
+   BUILD SECTIONS — ZIGZAG LAYOUT
+   ═══════════════════════════════════════════════ */
+.build-section{padding:80px 60px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.build-section:nth-child(even){background:var(--bg-0)}
+.build-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.build-section.reverse .build-inner{direction:rtl}
+.build-section.reverse .build-inner > *{direction:ltr}
+
+/* Image side */
+.build-image{position:relative;overflow:hidden}
+.build-image img{width:100%;border:1px solid var(--border);transition:var(--transition)}
+.build-image:hover img{border-color:var(--border-accent);transform:scale(1.02)}
+.build-image::after{content:'';position:absolute;inset:0;border:1px solid var(--accent);opacity:0;transition:var(--transition);pointer-events:none}
+.build-image:hover::after{opacity:0.15}
+
+/* Content side */
+.build-content{max-width:520px}
+.build-tag{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;margin-bottom:16px}
+.build-tag.blue{color:var(--accent);background:var(--accent-dim);border:1px solid rgba(56,189,248,0.2)}
+.build-tag.purple{color:#a78bfa;background:var(--purple-dim);border:1px solid rgba(124,58,237,0.2)}
+.build-tag.gold{color:var(--gold);background:var(--gold-dim);border:1px solid rgba(251,191,36,0.2)}
+.build-tag.green{color:var(--green);background:var(--green-dim);border:1px solid rgba(74,222,128,0.2)}
+.build-num{font-family:var(--mono);font-size:10px;color:var(--text-4);margin-bottom:8px}
+.build-title{font-family:var(--mono);font-size:clamp(20px,3vw,32px);color:var(--text-1);font-weight:700;line-height:1.15;margin-bottom:16px}
+.build-title .accent{color:var(--accent)}
+.build-title .purple-text{color:#a78bfa}
+.build-title .gold-text{color:var(--gold)}
+.build-desc{font-size:14px;color:var(--text-3);line-height:1.8;margin-bottom:20px}
+.build-desc strong{color:var(--text-2)}
+.build-detail{font-size:12px;color:var(--text-4);line-height:1.8;padding:16px 18px;background:var(--bg-3);border:1px solid var(--border);border-left:3px solid var(--accent)}
+.build-detail.purple-border{border-left-color:var(--purple)}
+.build-detail.gold-border{border-left-color:var(--gold)}
+.build-detail.green-border{border-left-color:var(--green)}
+.build-detail-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-4);margin-bottom:8px}
+.build-detail strong{color:var(--text-3)}
+
+/* Separator */
+.build-sep{max-width:1200px;margin:0 auto;padding:0 60px}
+.build-sep-line{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent)}
+
+/* BACK LINK */
+.back-link{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--text-4);margin-bottom:20px;transition:var(--transition)}
+.back-link:hover{color:var(--accent)}
+
+/* FOOTER */
+footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--bg-0)}
+.footer-brand{font-family:var(--mono);font-size:11px;color:var(--text-4)}
+.footer-brand span{color:var(--accent)}
+.footer-note{font-family:var(--mono);font-size:10px;color:var(--text-4)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.float-in-left{opacity:0;transform:translateX(-40px);transition:opacity 0.8s ease,transform 0.8s ease}
+.float-in-left.visible{opacity:1;transform:translateX(0)}
+.float-in-right{opacity:0;transform:translateX(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+.float-in-right.visible{opacity:1;transform:translateX(0)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links,.nav-cta{display:none}
+  .nav-mobile{display:block}
+  .page-header{padding:120px 24px 60px}
+  .build-section{padding:60px 24px}
+  .build-inner{grid-template-columns:1fr;gap:32px}
+  .build-section.reverse .build-inner{direction:ltr}
+  .build-content{max-width:100%}
+  footer{padding:20px 24px;flex-direction:column;gap:10px;text-align:center}
+}
+@media(max-width:500px){
+  .build-title{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="assets/images/ihack-logo.png" alt="iHack Audio">
+    <span>Shahnam Jilan</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#work">Work</a></li>
+    <li><a href="index.html#stack">Stack</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Contact</a>
+  <button class="nav-mobile" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menu">☰</button>
+</nav>
+
+<!-- PAGE HEADER -->
+<section class="page-header">
+  <div class="page-header-content">
+    <div class="section-eyebrow">What I Built</div>
+    <h1>iHack Audio Platform</h1>
+    <p>End-to-end AI audio production infrastructure. 8 modules, all built from zero budget. Every system operational. Every output verified.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BUILD 1: JOJO — VOICE CONTROLLER
+     ═══════════════════════════════════════════ -->
+<section class="build-section">
+  <div class="build-inner">
+    <div class="build-image float-in-left">
+      <img src="ihack app phtos/MAIN UI 1.png" alt="Jojo Voice Controller">
+    </div>
+    <div class="build-content float-in-right">
+      <span class="build-tag blue">Voice-Native Control</span>
+      <div class="build-num">01</div>
+      <h2 class="build-title">Jojo — <span class="accent">Voice Controller</span></h2>
+      <p class="build-desc">
+        The entire application is voice-operable. Speak to Jojo and it controls every view, setting, text field, and function in the platform. <strong>Raw mic → WebSocket → Gemini Live API → function calls → app state mutation + voice response.</strong>
+      </p>
+      <div class="build-detail">
+        <div class="build-detail-title">Function Calls</div>
+        <strong>setPodcastInstructions:</strong> Parse conversational input into structured JSON — Director's Notes, Scene Context, Speaker behavioral profiling.<br><br>
+        <strong>controlAppUi:</strong> Direct React global state mutation — view navigation, mode switching, script injection, TTS configuration. Every UI element controllable by speech.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BUILD 2: AUDIOPOOK ENGINE
+     ═══════════════════════════════════════════ -->
+<section class="build-section reverse">
+  <div class="build-inner">
+    <div class="build-image float-in-right">
+      <img src="ihack app phtos/iHack Audio Main Ecosystem UI.png" alt="Audiopook Production Engine">
+    </div>
+    <div class="build-content float-in-left">
+      <span class="build-tag purple">Audiobook Production</span>
+      <div class="build-num">02</div>
+      <h2 class="build-title">Audiopook <span class="purple-text">Production Engine</span></h2>
+      <p class="build-desc">
+        Full audiobook production pipeline. Character-driven narration with dynamic persona shifts across narrative arcs. <strong>Customized system instructions per book, Shadow AI for real-time script sanitization, QUADCORE parallel rendering with up to 30 API keys.</strong>
+      </p>
+      <div class="build-detail purple-border">
+        <div class="build-detail-title">Key Components</div>
+        <strong>Characterization System:</strong> Archetype, Intensity, Stage — dynamic persona shifts.<br>
+        <strong>Shadow AI:</strong> Real-time script sanitization, phonetic correction, acting tag validation.<br>
+        <strong>Focus-Mode UX:</strong> Cinematic reader with synced teleprompter.<br>
+        <strong>JSON Serialization:</strong> Portable, reproducible chapters.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BUILD 3: PODCAST AUTOMATION
+     ═══════════════════════════════════════════ -->
+<section class="build-section">
+  <div class="build-inner">
+    <div class="build-image float-in-left">
+      <img src="ihack app phtos/ihack Audio podcast automation.png" alt="Podcast Automation">
+    </div>
+    <div class="build-content float-in-right">
+      <span class="build-tag green">Automation</span>
+      <div class="build-num">03</div>
+      <h2 class="build-title">Podcast <span class="accent">Automation</span></h2>
+      <p class="build-desc">
+        Title to publication-ready episode in <strong>4–6 minutes</strong>. Voice-controlled via Jojo. Script generation, audio generation, forensic audit, social media clips, shorts video, Auphonic mastering — fully automated end to end.
+      </p>
+      <div class="build-detail green-border">
+        <div class="build-detail-title">Pipeline</div>
+        <strong>Input:</strong> Title, context, mode, voice selection (or voice command via Jojo).<br>
+        <strong>Script:</strong> Editable, or auto-populated from conversational input.<br>
+        <strong>Output:</strong> Audio + forensic QC + social clips + shorts + mastered publish.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BUILD 4: AUDIO AUDITOR
+     ═══════════════════════════════════════════ -->
+<section class="build-section reverse">
+  <div class="build-inner">
+    <div class="build-image float-in-right">
+      <img src="Buildig AI AUDIO EDITOR/Analysis UI.png" alt="AI Audio Auditor">
+    </div>
+    <div class="build-content float-in-left">
+      <span class="build-tag blue">Semantic Editing</span>
+      <div class="build-num">04</div>
+      <h2 class="build-title">AI Audio <span class="accent">Auditor</span></h2>
+      <p class="build-desc">
+        Contextual audio editing that asks <strong>"does this sound natural to a human listener?"</strong> — not "is the timestamp technically correct?" Whisper transcription → word-level timestamps → VAD segmentation → Gemma semantic analysis → editorial validation → correction.
+      </p>
+      <div class="build-detail">
+        <div class="build-detail-title">5-Pass Validation</div>
+        <strong>Pass 1:</strong> Word-level transcription precision.<br>
+        <strong>Pass 2+3:</strong> Deep-scan analysis + DSP boundary validation across 8 categories.<br>
+        <strong>Pass 4:</strong> QC audit before execution — catches over-cutting, meaning loss, flow breaks.<br>
+        <strong>Pass 5:</strong> Execute confirmed cuts only.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BUILD 5: SCRIPT DIRECTOR
+     ═══════════════════════════════════════════ -->
+<section class="build-section">
+  <div class="build-inner">
+    <div class="build-image float-in-left">
+      <img src="ihack app phtos/Main app - Agents Panel.png" alt="Script Director">
+    </div>
+    <div class="build-content float-in-right">
+      <span class="build-tag gold">Script Engineering</span>
+      <div class="build-num">05</div>
+      <h2 class="build-title">Script <span class="gold-text">Director</span></h2>
+      <p class="build-desc">
+        Multi-mode scripting system with a proprietary <strong>kinetic notation</strong> — [Archetype, Intensity, Stage] ((Kinetic Actions)) — that engineers vocal performance at the instruction level. The engine interprets these into acoustic behavior.
+      </p>
+      <div class="build-detail gold-border">
+        <div class="build-detail-title">Modes & Notation</div>
+        <strong>Modes:</strong> Podcast, News, General, Cinematic Audiobooks.<br>
+        <strong>Kinetic Notation:</strong> [Cynic, i4, S5] ((labored breath)) — i4 = specific glottal tension, S5 = high breath-to-voice ratio.<br>
+        <strong>Capabilities:</strong> Generate from context, optimize existing, add vocal cues, isolate speaker scripts, TTS performance notes.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BUILD 6: QUADCORE
+     ═══════════════════════════════════════════ -->
+<section class="build-section reverse">
+  <div class="build-inner">
+    <div class="build-image float-in-right">
+      <img src="ihack app phtos/Main app - Home.png" alt="QuadCore Engine">
+    </div>
+    <div class="build-content float-in-left">
+      <span class="build-tag purple">Parallel Processing</span>
+      <div class="build-num">06</div>
+      <h2 class="build-title">QuadCore — <span class="purple-text">Parallel Engine</span></h2>
+      <p class="build-desc">
+        4 independent chapter engines running simultaneously. Up to <strong>30 API keys distributed across a decentralized pool</strong>. Cascading generation with staggered async rendering. Full kinetic notation support for voice synthesis.
+      </p>
+      <div class="build-detail purple-border">
+        <div class="build-detail-title">Architecture</div>
+        <strong>4 Engines:</strong> Independent chapter processing in parallel.<br>
+        <strong>Key Pool:</strong> Up to 30 API keys, decentralized distribution.<br>
+        <strong>Voice:</strong> Zephyr + full kinetic notation [Archetype, Intensity, Stage].<br>
+        <strong>Output:</strong> 48,000 Hz · 24-bit PCM WAV.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BUILD 7: MAYA LORA
+     ═══════════════════════════════════════════ -->
+<section class="build-section">
+  <div class="build-inner">
+    <div class="build-image float-in-left">
+      <img src="ihack app phtos/audio analyzer.png" alt="Maya LoRA Voice Lab">
+    </div>
+    <div class="build-content float-in-right">
+      <span class="build-tag gold">Voice Science</span>
+      <div class="build-num">07</div>
+      <h2 class="build-title">Maya LoRA — <span class="gold-text">Voice Lab</span></h2>
+      <p class="build-desc">
+        Acoustic fingerprinting system that extracts <strong>F0 pitch, RMS energy, spectral brightness, and 13 MFCCs</strong> from any recording — then scores voice consistency 0–100 via cosine similarity. The measurement system that defines what voice consistency means numerically.
+      </p>
+      <div class="build-detail gold-border">
+        <div class="build-detail-title">4-Step Pipeline</div>
+        <strong>Step 1:</strong> Reference audio generation (voice instruct → .wav).<br>
+        <strong>Step 2:</strong> Acoustic feature extraction via librosa — F0, RMS, Tempo, Spectral Brightness, 13 MFCCs.<br>
+        <strong>Step 3:</strong> Locked audio generation using instruct string.<br>
+        <strong>Step 4:</strong> Voice similarity scoring — ≥75 locked, 50–74 partial, <50 rework.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BUILD 8: 3D SPATIAL MAP
+     ═══════════════════════════════════════════ -->
+<section class="build-section reverse">
+  <div class="build-inner">
+    <div class="build-image float-in-right">
+      <img src="ihack app phtos/iHack Audio Sound Design.png" alt="3D Spatial Map Engine">
+    </div>
+    <div class="build-content float-in-left">
+      <span class="build-tag green">Spatial Audio</span>
+      <div class="build-num">08</div>
+      <h2 class="build-title">3D Spatial <span class="accent">Map Engine</span></h2>
+      <p class="build-desc">
+        Line-by-line spatial audio design targeting <strong>A24 / Dolby Atmos standards</strong>. Ambient bed specification, SFX placement with stereo field coordinates, transition design, music recommendation by emotional arc, mixing notes per element.
+      </p>
+      <div class="build-detail green-border">
+        <div class="build-detail-title">Output Per Line</div>
+        <strong>Ambient:</strong> Frequency + texture specification.<br>
+        <strong>SFX:</strong> Stereo field coordinates + placement.<br>
+        <strong>Transitions:</strong> Snap cuts, low-pass filter sweeps.<br>
+        <strong>Music:</strong> Scene emotional arc recommendations.<br>
+        <strong>Mixing:</strong> Compression, EQ, reverb per element.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Shahnam <span>Jilan</span></div>
+  <div class="footer-note">Built by hand. No template.</div>
+</footer>
+
+<!-- JAVASCRIPT -->
+<script>
+// Scroll reveal
+const revealEls = document.querySelectorAll('.reveal, .float-in-left, .float-in-right');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }});
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => revealObs.observe(el));
+
+// Mobile nav
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('nav')) document.querySelector('.nav-links')?.classList.remove('show');
+});
+</script>
+</body>
+</html>

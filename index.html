@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shahnam Hossain Jilan — AI Audio Systems Architect</title>
+<meta name="description" content="Builder of end-to-end AI audio production systems. 8 years professional audio. Published, ranked, and proven.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="assets/images/ihack-logo.png" type="image/png">
+<style>
+/* ═══════════════════════════════════════════════
+   RESET & GLOBALS
+   ═══════════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg-0:#030712;--bg-1:#060a14;--bg-2:#0a0e1a;--bg-3:#0f172a;--bg-4:#1e293b;
+  --accent:#38bdf8;--accent-dim:#0c4a6e;--purple:#7c3aed;--purple-dim:#1a0a2e;
+  --gold:#fbbf24;--gold-dim:#1a1000;--green:#4ade80;--green-dim:#052e16;
+  --red:#f87171;--text-1:#f8fafc;--text-2:#e2e8f0;--text-3:#94a3b8;--text-4:#475569;
+  --border:#1e293b;--border-accent:#1e3a5f;
+  --mono:'Space Mono',monospace;--sans:'Inter',sans-serif;
+  --transition:all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg-1);color:var(--text-2);font-family:var(--sans);font-size:15px;line-height:1.7;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none;transition:var(--transition)}
+a:hover{color:#7dd3fc}
+::selection{background:var(--accent-dim);color:var(--accent)}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg-0)}
+::-webkit-scrollbar-thumb{background:var(--accent-dim);border-radius:2px}
+img{max-width:100%;display:block}
+
+/* ═══════════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(6,10,20,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo img{height:28px;width:auto}
+.nav-logo span{font-family:var(--mono);font-size:13px;color:var(--text-1);letter-spacing:0.5px}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-4);transition:var(--transition)}
+.nav-links a:hover{color:var(--accent)}
+.nav-cta{font-family:var(--mono);font-size:11px;padding:8px 18px;border:1px solid var(--accent);color:var(--accent);transition:var(--transition)}
+.nav-cta:hover{background:var(--accent);color:var(--bg-0)}
+.nav-mobile{display:none;background:none;border:none;color:var(--text-2);font-size:24px;cursor:pointer}
+
+/* ═══════════════════════════════════════════════
+   SECTION 1: HERO + ABOUT ME
+   ═══════════════════════════════════════════════ */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:100px 60px 80px}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(56,189,248,0.06) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 80% 80%,rgba(124,58,237,0.04) 0%,transparent 60%),var(--bg-0)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(56,189,248,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,0.02) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%)}
+.hero-inner{position:relative;z-index:1;max-width:1100px;width:100%;display:grid;grid-template-columns:1fr 320px;gap:80px;align-items:center}
+.hero-text{max-width:640px}
+.hero-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.hero-eyebrow::before{content:'';width:32px;height:1px;background:var(--accent)}
+.hero-name{font-family:var(--mono);font-size:clamp(32px,5.5vw,64px);font-weight:700;color:var(--text-1);line-height:1.05;margin-bottom:12px;letter-spacing:-2px}
+.hero-role{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:2px;margin-bottom:32px;text-transform:uppercase}
+.hero-statement{font-size:18px;color:var(--text-2);line-height:1.7;margin-bottom:24px;max-width:560px}
+.hero-statement strong{color:var(--text-1)}
+.hero-about{font-size:14px;color:var(--text-3);line-height:1.8;margin-bottom:36px;max-width:560px}
+.hero-about strong{color:var(--text-2)}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:36px}
+.btn-primary{font-family:var(--mono);font-size:12px;letter-spacing:1px;padding:14px 28px;background:var(--accent);color:var(--bg-0);font-weight:700;transition:var(--transition);display:inline-block;cursor:pointer;border:none}
+.btn-primary:hover{background:#7dd3fc;color:var(--bg-0);transform:translateY(-2px);box-shadow:0 8px 32px rgba(56,189,248,0.3)}
+.btn-secondary{font-family:var(--mono);font-size:12px;letter-spacing:1px;padding:14px 28px;border:1px solid var(--border-accent);color:var(--text-3);transition:var(--transition);display:inline-block;background:none;cursor:pointer}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+.hero-photo{position:relative}
+.hero-photo img{width:320px;height:400px;object-fit:cover;border:1px solid var(--border);filter:grayscale(20%) contrast(1.05)}
+.hero-photo::after{content:'';position:absolute;inset:0;border:1px solid var(--accent);opacity:0.15;transform:translate(12px,12px);pointer-events:none}
+.hero-badges{display:flex;gap:10px;flex-wrap:wrap;padding-top:24px;border-top:1px solid var(--border)}
+.badge{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;background:var(--bg-3);border:1px solid var(--border);color:var(--text-4)}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+
+/* ═══════════════════════════════════════════════
+   SECTION 2: THE NUMBERS
+   ═══════════════════════════════════════════════ */
+#numbers{background:var(--bg-0);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.numbers-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border)}
+.number-item{background:var(--bg-1);padding:28px 16px;text-align:center;transition:var(--transition);position:relative;overflow:hidden}
+.number-item::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transition:var(--transition)}
+.number-item:hover::before{transform:scaleX(1)}
+.number-item:hover{background:var(--bg-2)}
+.number-val{font-family:var(--mono);font-size:clamp(24px,3vw,36px);font-weight:700;color:var(--accent);display:block;line-height:1;margin-bottom:8px}
+.number-lbl{font-size:10px;color:var(--text-4);text-transform:uppercase;letter-spacing:1px;line-height:1.5}
+
+/* ═══════════════════════════════════════════════
+   SECTION 3: BUILDS TEASER
+   ═══════════════════════════════════════════════ */
+#builds-teaser{padding:100px 60px;max-width:1200px;margin:0 auto}
+.section-header{margin-bottom:56px}
+.section-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.section-eyebrow::before{content:'';width:20px;height:1px;background:var(--accent)}
+.section-title{font-family:var(--mono);font-size:clamp(24px,4vw,40px);color:var(--text-1);font-weight:700;line-height:1.15;margin-bottom:14px}
+.section-desc{font-size:14px;color:var(--text-3);max-width:560px;line-height:1.8}
+.teaser-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px}
+.teaser-card{background:var(--bg-2);border:1px solid var(--border);overflow:hidden;transition:var(--transition);cursor:pointer}
+.teaser-card:hover{border-color:var(--border-accent);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
+.teaser-card img{width:100%;height:200px;object-fit:cover;border-bottom:1px solid var(--border)}
+.teaser-card-body{padding:20px}
+.teaser-card-tag{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.teaser-card-title{font-family:var(--mono);font-size:14px;color:var(--text-1);font-weight:700;margin-bottom:8px;line-height:1.3}
+.teaser-card-desc{font-size:12px;color:var(--text-4);line-height:1.7}
+.teaser-cta-wrap{text-align:center}
+.btn-large{font-family:var(--mono);font-size:13px;letter-spacing:1px;padding:16px 40px;border:1px solid var(--accent);color:var(--accent);transition:var(--transition);display:inline-block;background:none;cursor:pointer}
+.btn-large:hover{background:var(--accent);color:var(--bg-0)}
+
+/* ═══════════════════════════════════════════════
+   SECTION 4: BUILT ON $0
+   ═══════════════════════════════════════════════ */
+#foundation{padding:100px 60px;background:var(--bg-0);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.foundation-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.foundation-narrative .section-eyebrow{margin-bottom:14px}
+.foundation-headline{font-family:var(--mono);font-size:clamp(24px,4vw,40px);font-weight:700;color:var(--text-1);line-height:1.15;margin-bottom:22px}
+.foundation-headline span{color:var(--gold)}
+.foundation-body{font-size:14px;color:var(--text-3);line-height:1.9;margin-bottom:20px}
+.foundation-body strong{color:var(--text-2)}
+.foundation-closing{font-family:var(--mono);font-size:13px;color:var(--gold);letter-spacing:0.5px;margin-top:24px;padding:16px 20px;background:var(--gold-dim);border:1px solid rgba(251,191,36,0.15);border-left:3px solid var(--gold)}
+.obstacles-grid{display:flex;flex-direction:column;gap:14px}
+.obstacle{display:flex;gap:14px;padding:16px 18px;background:var(--bg-3);border:1px solid var(--border);transition:var(--transition)}
+.obstacle:hover{border-color:var(--border-accent)}
+.obstacle-icon{font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:1px;flex-shrink:0;padding-top:2px;width:36px}
+.obstacle-text{font-size:12px;color:var(--text-4);line-height:1.7}
+.obstacle-text strong{color:var(--text-3)}
+
+/* ═══════════════════════════════════════════════
+   SECTION 5: PUBLISHED WORK
+   ═══════════════════════════════════════════════ */
+#work{padding:100px 60px;max-width:1200px;margin:0 auto}
+.work-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:20px}
+.audio-section h3{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-4);margin-bottom:20px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.audio-player{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--bg-2);border:1px solid var(--border);margin-bottom:10px;transition:var(--transition)}
+.audio-player:hover{border-color:var(--border-accent)}
+.audio-title{font-family:var(--mono);font-size:11px;color:var(--text-3);min-width:0;flex:1}
+.audio-player audio{height:32px;flex:2}
+.case-studies{display:flex;flex-direction:column;gap:20px}
+.case-study{background:var(--bg-2);border:1px solid var(--border);overflow:hidden;transition:var(--transition)}
+.case-study:hover{border-color:var(--border-accent)}
+.case-study img{width:100%;height:180px;object-fit:cover;border-bottom:1px solid var(--border)}
+.case-study-body{padding:18px}
+.case-study-tag{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);margin-bottom:6px}
+.case-study-title{font-family:var(--mono);font-size:13px;color:var(--text-1);font-weight:700;margin-bottom:6px}
+.case-study-desc{font-size:11px;color:var(--text-4);line-height:1.7}
+.apple-link{display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-family:var(--mono);font-size:12px;color:var(--accent)}
+.apple-link:hover{color:#7dd3fc}
+
+/* ═══════════════════════════════════════════════
+   SECTION 6: TECHNICAL STACK
+   ═══════════════════════════════════════════════ */
+#stack{padding:100px 60px;background:var(--bg-0);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stack-wrap{max-width:1200px;margin:0 auto}
+.stack-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:20px}
+.stack-group{margin-bottom:32px}
+.stack-group-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-4);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:14px}
+.stack-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-3);padding:8px 0;border-bottom:1px solid rgba(30,41,59,0.5);transition:var(--transition)}
+.stack-item:hover{color:var(--text-1);padding-left:8px}
+.stack-dot{width:5px;height:5px;border-radius:50%;background:var(--border);flex-shrink:0;transition:var(--transition)}
+.stack-item:hover .stack-dot{background:var(--accent)}
+.stack-item.custom .stack-dot{background:rgba(124,58,237,0.4)}
+.stack-item.custom:hover .stack-dot{background:var(--purple)}
+.stack-pill{margin-left:auto;font-family:var(--mono);font-size:8px;padding:2px 6px;background:var(--purple-dim);border:1px solid rgba(124,58,237,0.3);color:#a78bfa}
+
+/* ═══════════════════════════════════════════════
+   SECTION 7: EXPERIENCE
+   ═══════════════════════════════════════════════ */
+#experience{padding:100px 60px;max-width:1200px;margin:0 auto}
+.timeline{margin-top:20px;position:relative;padding-left:40px}
+.timeline::before{content:'';position:absolute;left:15px;top:0;bottom:0;width:1px;background:var(--border)}
+.timeline-item{position:relative;margin-bottom:40px}
+.timeline-dot{position:absolute;left:-33px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--bg-0);border:2px solid var(--accent)}
+.timeline-content{background:var(--bg-2);border:1px solid var(--border);padding:28px;position:relative}
+.timeline-content::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--accent),transparent)}
+.timeline-content.alt::before{background:linear-gradient(to right,var(--purple),transparent)}
+.timeline-period{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--text-4);margin-bottom:8px}
+.timeline-role{font-family:var(--mono);font-size:15px;color:var(--text-1);font-weight:700;margin-bottom:4px;line-height:1.3}
+.timeline-company{font-size:12px;color:var(--accent);margin-bottom:16px}
+.timeline-bullets{list-style:none;display:flex;flex-direction:column;gap:8px}
+.timeline-bullets li{font-size:12px;color:var(--text-4);padding-left:14px;position:relative;line-height:1.7}
+.timeline-bullets li::before{content:'▸';position:absolute;left:0;color:var(--accent);font-size:9px;top:4px}
+.timeline-bullets li strong{color:var(--text-3)}
+
+/* ═══════════════════════════════════════════════
+   SECTION 8: CONTACT
+   ═══════════════════════════════════════════════ */
+#contact{padding:120px 60px;text-align:center;background:var(--bg-0);border-top:1px solid var(--border)}
+.contact-wrap{max-width:700px;margin:0 auto}
+.contact-headline{font-family:var(--mono);font-size:clamp(28px,5vw,52px);color:var(--text-1);font-weight:700;margin-bottom:16px;line-height:1.1}
+.contact-headline span{color:var(--accent)}
+.contact-sub{font-size:14px;color:var(--text-4);margin-bottom:48px;line-height:1.8}
+.contact-links{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.contact-link{font-family:var(--mono);font-size:12px;letter-spacing:1px;padding:14px 28px;border:1px solid var(--border-accent);color:var(--text-3);transition:var(--transition);display:inline-flex;align-items:center;gap:8px}
+.contact-link:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.contact-link.primary{background:var(--accent);color:var(--bg-0);border-color:var(--accent)}
+.contact-link.primary:hover{background:#7dd3fc}
+
+/* ═══════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════ */
+footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--bg-0)}
+.footer-brand{font-family:var(--mono);font-size:11px;color:var(--text-4)}
+.footer-brand span{color:var(--accent)}
+.footer-note{font-family:var(--mono);font-size:10px;color:var(--text-4)}
+
+/* ═══════════════════════════════════════════════
+   REVEAL ANIMATIONS
+   ═══════════════════════════════════════════════ */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:0.1s}
+.reveal-delay-2{transition-delay:0.2s}
+.reveal-delay-3{transition-delay:0.3s}
+.float-in-left{opacity:0;transform:translateX(-40px);transition:opacity 0.8s ease,transform 0.8s ease}
+.float-in-left.visible{opacity:1;transform:translateX(0)}
+.float-in-right{opacity:0;transform:translateX(40px);transition:opacity 0.8s ease,transform 0.8s ease}
+.float-in-right.visible{opacity:1;transform:translateX(0)}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════ */
+@media(max-width:900px){
+  nav{padding:0 20px}
+  .nav-links,.nav-cta{display:none}
+  .nav-mobile{display:block}
+  #hero{padding:100px 24px 60px}
+  .hero-inner{grid-template-columns:1fr;gap:40px}
+  .hero-photo{order:-1;display:flex;justify-content:center}
+  .hero-photo img{width:240px;height:300px}
+  .hero-photo::after{display:none}
+  #numbers{overflow-x:auto}
+  .numbers-grid{grid-template-columns:repeat(6,minmax(140px,1fr))}
+  #builds-teaser,#work,#experience,#contact{padding:60px 24px}
+  #foundation,#stack{padding:60px 24px}
+  .teaser-grid{grid-template-columns:1fr}
+  .foundation-grid{grid-template-columns:1fr;gap:40px}
+  .work-grid{grid-template-columns:1fr}
+  .stack-grid{grid-template-columns:1fr}
+  .timeline{padding-left:30px}
+  footer{padding:20px 24px;flex-direction:column;gap:10px;text-align:center}
+}
+@media(max-width:500px){
+  .numbers-grid{grid-template-columns:repeat(3,1fr)}
+  .hero-name{font-size:28px;letter-spacing:-1px}
+  .contact-links{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAVIGATION
+     ═══════════════════════════════════════════ -->
+<nav>
+  <div class="nav-logo">
+    <img src="assets/images/ihack-logo.png" alt="iHack Audio">
+    <span>Shahnam Jilan</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#builds-teaser">Builds</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#stack">Stack</a></li>
+    <li><a href="#experience">Experience</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Contact</a>
+  <button class="nav-mobile" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menu">☰</button>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 1: HERO + ABOUT ME
+     ═══════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow reveal">AI Audio Systems Architect</div>
+      <h1 class="hero-name reveal reveal-delay-1">SHAHNAM<br>HOSSAIN JILAN</h1>
+      <div class="hero-role reveal reveal-delay-2">Founder, iHack Audio &nbsp;·&nbsp; Builder &nbsp;·&nbsp; Audio Engineer</div>
+      <p class="hero-statement reveal reveal-delay-2">
+        I build <strong>systems that teach AI to understand, produce, and validate audio</strong> at broadcast quality.
+      </p>
+      <p class="hero-about reveal reveal-delay-3">
+        <strong>8 years</strong> of professional audio production. <strong>20,000+ hours</strong> of critical listening. I've built an end-to-end AI audio production platform — multi-agent orchestration, semantic editing, forensic quality audit, 3D spatial mapping — all from zero budget. <strong>Ranked #1 on Apple Podcasts</strong> for "AI AUDIO." No marketing. Just output quality.
+      </p>
+      <div class="hero-actions reveal reveal-delay-3">
+        <a href="builds.html" class="btn-primary">See What I Built</a>
+        <a href="#work" class="btn-secondary">Hear the Work</a>
+      </div>
+      <div class="hero-badges reveal reveal-delay-3">
+        <div class="badge"><span class="dot"></span> Available for work</div>
+        <div class="badge">Remote Worldwide</div>
+        <div class="badge">Dhaka, Bangladesh</div>
+      </div>
+    </div>
+    <div class="hero-photo reveal">
+      <img src="ihack app phtos/Shahnam Hossain Jilan 2.png" alt="Shahnam Hossain Jilan">
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 2: THE NUMBERS
+     ═══════════════════════════════════════════ -->
+<section id="numbers">
+  <div class="numbers-grid">
+    <div class="number-item reveal">
+      <span class="number-val" data-target="8">0</span>
+      <span class="number-lbl">Years Production</span>
+    </div>
+    <div class="number-item reveal reveal-delay-1">
+      <span class="number-val" data-target="20000" data-suffix="+">0</span>
+      <span class="number-lbl">Listening Hours</span>
+    </div>
+    <div class="number-item reveal reveal-delay-1">
+      <span class="number-val" data-target="900" data-suffix="+">0</span>
+      <span class="number-lbl">Upwork Hours (Top Rated)</span>
+    </div>
+    <div class="number-item reveal reveal-delay-2">
+      <span class="number-val" data-target="8">0</span>
+      <span class="number-lbl">Modules Built</span>
+    </div>
+    <div class="number-item reveal reveal-delay-2">
+      <span class="number-val" data-target="5">0</span>
+      <span class="number-lbl">AI Agents Orchestrated</span>
+    </div>
+    <div class="number-item reveal reveal-delay-3">
+      <span class="number-val" data-target="1" data-prefix="#">0</span>
+      <span class="number-lbl">Apple Podcasts Rank</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 3: BUILDS TEASER
+     ═══════════════════════════════════════════ -->
+<section id="builds-teaser">
+  <div class="section-header reveal">
+    <div class="section-eyebrow">What I Built</div>
+    <h2 class="section-title">iHack Audio Platform</h2>
+    <p class="section-desc">End-to-end AI audio production infrastructure. Not a wrapper. Not a chatbot. A production operating system for spoken audio.</p>
+  </div>
+  <div class="teaser-grid">
+    <div class="teaser-card reveal">
+      <img src="ihack app phtos/Main app - Home.png" alt="iHack Audio Studio">
+      <div class="teaser-card-body">
+        <div class="teaser-card-tag">Core Platform</div>
+        <div class="teaser-card-title">Audio Studio Pro</div>
+        <div class="teaser-card-desc">Semantic editing engine with 5-pass validation. Word-level precision. Asks "does this sound natural?" not "is the timestamp correct?"</div>
+      </div>
+    </div>
+    <div class="teaser-card reveal reveal-delay-1">
+      <img src="ihack app phtos/Main app - Agent Hub.png" alt="Multi-Agent System">
+      <div class="teaser-card-body">
+        <div class="teaser-card-tag">Orchestration</div>
+        <div class="teaser-card-title">Multi-Agent Swarm</div>
+        <div class="teaser-card-desc">5 orchestrated agents — Jarvis, Aura, and specialized workers. Voice-native control. Full application operable by speech.</div>
+      </div>
+    </div>
+    <div class="teaser-card reveal reveal-delay-2">
+      <img src="ihack app phtos/SKY SKYLAR_AirPilot__AUDIT RESULT.png" alt="Quality Audit">
+      <div class="teaser-card-body">
+        <div class="teaser-card-tag">Quality</div>
+        <div class="teaser-card-title">Verified, Not Theorized</div>
+        <div class="teaser-card-desc">Automated forensic audit on every production. Performance, narration, character, emotion, background — all scored and verified.</div>
+      </div>
+    </div>
+  </div>
+  <div class="teaser-cta-wrap reveal">
+    <a href="builds.html" class="btn-large">See All Builds →</a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 4: BUILT ON $0
+     ═══════════════════════════════════════════ -->
+<section id="foundation">
+  <div class="foundation-grid">
+    <div class="foundation-narrative">
+      <div class="section-eyebrow reveal">The Foundation</div>
+      <h2 class="foundation-headline reveal">Built everything.<br><span>Spent nothing.</span></h2>
+      <p class="foundation-body reveal">
+        Every system was built and operated on free tier — Google AI Studio free quota, Groq free tier, OpenRouter fallback, Kaggle free GPU allocation. The semantic editing engine runs on a Kaggle notebook with a live tunnel bridged into the local application — because there was no other way to access GPU compute for free.
+      </p>
+      <p class="foundation-body reveal">
+        Rate limits, session expiry, quota caps, connection drops — <strong>all handled in production, all solved in architecture.</strong> The output still scored Tier 1 Broadcast standard.
+      </p>
+      <p class="foundation-closing reveal">
+        Give this system real compute and a paid API budget — the ceiling disappears entirely.
+      </p>
+    </div>
+    <div class="obstacles-grid">
+      <div class="obstacle reveal">
+        <span class="obstacle-icon">GPU</span>
+        <div class="obstacle-text"><strong>No GPU owned.</strong> Used Kaggle free allocation with live tunneling into local application for real-time inference.</div>
+      </div>
+      <div class="obstacle reveal reveal-delay-1">
+        <span class="obstacle-icon">$$$</span>
+        <div class="obstacle-text"><strong>No cloud budget.</strong> Entire infrastructure runs on free tiers — Google AI Studio, Groq, OpenRouter fallback routing.</div>
+      </div>
+      <div class="obstacle reveal reveal-delay-1">
+        <span class="obstacle-icon">API</span>
+        <div class="obstacle-text"><strong>No paid API tier.</strong> Rate limits, session expiry, quota caps — all solved architecturally. 30 API keys distributed across a pool.</div>
+      </div>
+      <div class="obstacle reveal reveal-delay-2">
+        <span class="obstacle-icon">TEAM</span>
+        <div class="obstacle-text"><strong>No team.</strong> Solo founder. Built the platform, the modules, the agents, the audit system, the voice lab — all of it.</div>
+      </div>
+      <div class="obstacle reveal reveal-delay-2">
+        <span class="obstacle-icon">MARKET</span>
+        <div class="obstacle-text"><strong>No marketing spend.</strong> Ranked #1 on Apple Podcasts for "AI AUDIO" purely on output quality. Zero promotion.</div>
+      </div>
+      <div class="obstacle reveal reveal-delay-3">
+        <span class="obstacle-icon">RESULT</span>
+        <div class="obstacle-text"><strong>Output classified: Tier 1 Broadcast / Audible Original standard.</strong> Estimated $550–$850 per finished hour value.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 5: PUBLISHED WORK
+     ═══════════════════════════════════════════ -->
+<section id="work">
+  <div class="section-header reveal">
+    <div class="section-eyebrow">Published Work</div>
+    <h2 class="section-title">Hear the output</h2>
+    <p class="section-desc">Every piece of audio produced with the iHack Audio platform. Quality verified, not assumed.</p>
+  </div>
+  <div class="work-grid">
+    <div class="audio-section">
+      <h3>Podcast Episodes</h3>
+      <div class="audio-player reveal">
+        <span class="audio-title">When AI Takes Over the Podcast</span>
+        <audio controls preload="none"></audio>
+      </div>
+      <div class="audio-player reveal reveal-delay-1">
+        <span class="audio-title">My AI Host Got Upset</span>
+        <audio controls preload="none"></audio>
+      </div>
+      <div class="audio-player reveal reveal-delay-1">
+        <span class="audio-title">My AI Wants to Be HUMAN</span>
+        <audio controls preload="none"></audio>
+      </div>
+      <div class="audio-player reveal reveal-delay-2">
+        <span class="audio-title">Podcast Airways — Sky Skylar</span>
+        <audio controls preload="none" src="AUDIOCLIPS/PODCAST_AIRWAYS_SKY SKYLAR.mp3"></audio>
+      </div>
+
+      <h3 style="margin-top:32px">Audiobook Samples</h3>
+      <div class="audio-player reveal">
+        <span class="audio-title">Blink and Gone — Sample</span>
+        <audio controls preload="none" src="AUDIOCLIPS/Audiobook  Blink and Gone_SAMPLE.mp3"></audio>
+      </div>
+      <div class="audio-player reveal reveal-delay-1">
+        <span class="audio-title">3D Sound Design — Sample</span>
+        <audio controls preload="none" src="AUDIOCLIPS/Audiobook 3D Sound design_SAMPLE.mp3"></audio>
+      </div>
+      <div class="audio-player reveal reveal-delay-1">
+        <span class="audio-title">Cinematic Pace — Sample</span>
+        <audio controls preload="none" src="AUDIOCLIPS/Audiobook Cinematic Pace_SAMPLE.mp3"></audio>
+      </div>
+      <div class="audio-player reveal reveal-delay-2">
+        <span class="audio-title">Cinematic Story & Sound</span>
+        <audio controls preload="none" src="AUDIOCLIPS/CINEMATIC STORY & SOUND_SAMPLE.mp3"></audio>
+      </div>
+    </div>
+    <div class="case-studies">
+      <div class="case-study reveal">
+        <img src="ihack app phtos/iHack Audio Main Ecosystem UI.png" alt="iHack Audio Ecosystem">
+        <div class="case-study-body">
+          <div class="case-study-tag">Platform</div>
+          <div class="case-study-title">iHack Audio Ecosystem</div>
+          <div class="case-study-desc">Complete production layer — from script generation to mastered output. 8 modules, 5 agents, forensic audit.</div>
+        </div>
+      </div>
+      <div class="case-study reveal reveal-delay-1">
+        <img src="ihack app phtos/ihack Audio podcast automation.png" alt="Podcast Automation">
+        <div class="case-study-body">
+          <div class="case-study-tag">Automation</div>
+          <div class="case-study-title">Podcast Automation Pipeline</div>
+          <div class="case-study-desc">Title to publication-ready episode in 4–6 minutes. Script, voice, audit, mastering — fully automated.</div>
+        </div>
+      </div>
+      <div class="case-study reveal reveal-delay-2">
+        <img src="ihack app phtos/iHack Audio Sound Design.png" alt="Sound Design">
+        <div class="case-study-body">
+          <div class="case-study-tag">Spatial Audio</div>
+          <div class="case-study-title">3D Sound Design</div>
+          <div class="case-study-desc">Line-by-line spatial audio mapping. Ambient beds, SFX placement, stereo field coordinates, A24/Dolby Atmos target.</div>
+        </div>
+      </div>
+      <a href="https://podcasts.apple.com/us/podcast/ihack-audio-ai-audio-production-for-podcasters-audiobook/id1851081502" target="_blank" class="apple-link reveal">
+        ▸ Listen on Apple Podcasts — #1 "AI AUDIO"
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 6: TECHNICAL STACK
+     ═══════════════════════════════════════════ -->
+<section id="stack">
+  <div class="stack-wrap">
+    <div class="section-header reveal">
+      <div class="section-eyebrow">Technical Stack</div>
+      <h2 class="section-title">Tools & Systems</h2>
+      <p class="section-desc">Professional audio tools plus custom-built AI infrastructure.</p>
+    </div>
+    <div class="stack-grid">
+      <div>
+        <div class="stack-group">
+          <div class="stack-group-title">Audio Tools (Professional)</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> Adobe Audition</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> iZotope RX Series</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> Auphonic</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> Descript</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> Riverside</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> Audacity</div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-group-title">Audio Principles (Expert)</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> Waveform & Spectral Analysis</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> RMS Optimization & LUFS Standards</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> VAD Segmentation & Silence Detection</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> Spatial Audio & Stereo Field Design</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> Signal Processing & Noise Reduction</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> Voice Performance & Kinetic Notation</div>
+        </div>
+      </div>
+      <div>
+        <div class="stack-group">
+          <div class="stack-group-title">AI / Infrastructure</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> Gemini 2.5 Pro / Flash</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> Gemini Live API</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> Gemma (Semantic Analysis)</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> Groq / Whisper</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> OpenRouter</div>
+          <div class="stack-item reveal"><span class="stack-dot"></span> React / Express</div>
+        </div>
+        <div class="stack-group">
+          <div class="stack-group-title">Custom-Built</div>
+          <div class="stack-item custom reveal"><span class="stack-dot"></span> iHack Audio Studio Pro <span class="stack-pill">built</span></div>
+          <div class="stack-item custom reveal"><span class="stack-dot"></span> iHack Mastering App <span class="stack-pill">built</span></div>
+          <div class="stack-item custom reveal"><span class="stack-dot"></span> Maya LoRA Voice Lab <span class="stack-pill">built</span></div>
+          <div class="stack-item custom reveal"><span class="stack-dot"></span> Multi-Agent Swarm <span class="stack-pill">built</span></div>
+          <div class="stack-item custom reveal"><span class="stack-dot"></span> Forensic Audit System <span class="stack-pill">built</span></div>
+          <div class="stack-item custom reveal"><span class="stack-dot"></span> QuadCore Engine <span class="stack-pill">built</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 7: EXPERIENCE
+     ═══════════════════════════════════════════ -->
+<section id="experience">
+  <div class="section-header reveal">
+    <div class="section-eyebrow">Experience</div>
+    <h2 class="section-title">Work History</h2>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content">
+        <div class="timeline-period">2022 – Present</div>
+        <div class="timeline-role">Founder & Lead AI Audio Systems Architect</div>
+        <div class="timeline-company">iHack Audio — Dhaka, Bangladesh (Remote)</div>
+        <ul class="timeline-bullets">
+          <li>Built end-to-end AI audio production platform from zero — <strong>8 modules, 5 orchestrated agents</strong></li>
+          <li>Designed kinetic notation system for vocal performance engineering</li>
+          <li>Created semantic audio editing engine with pre-execution QC</li>
+          <li>Built 3D spatial audio mapping pipeline (A24/Dolby Atmos target)</li>
+          <li>Published output ranked <strong>#1 on Apple Podcasts</strong> for "AI AUDIO" — zero marketing spend</li>
+        </ul>
+      </div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-dot"></div>
+      <div class="timeline-content alt">
+        <div class="timeline-period">2017 – Present</div>
+        <div class="timeline-role">Top Rated Audio Editor & Podcast Producer</div>
+        <div class="timeline-company">Upwork — Remote</div>
+        <ul class="timeline-bullets">
+          <li><strong>900+ hours</strong> logged. Top Rated status maintained.</li>
+          <li>Podcast production, audiobook narration QC, sound design, professional mastering</li>
+          <li>Multi-character dialogue production for international clients</li>
+          <li>Long-form spoken word: audiobooks, podcasts, documentaries, courses</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 8: CONTACT
+     ═══════════════════════════════════════════ -->
+<section id="contact">
+  <div class="contact-wrap">
+    <h2 class="contact-headline reveal">Let's <span>talk.</span></h2>
+    <p class="contact-sub reveal reveal-delay-1">Open to roles in AI audio, audio engineering, and systems architecture. Remote worldwide.</p>
+    <div class="contact-links reveal reveal-delay-2">
+      <a href="mailto:iHackaudio@gmail.com" class="contact-link primary">Email</a>
+      <a href="https://podcasts.apple.com/us/podcast/ihack-audio-ai-audio-production-for-podcasters-audiobook/id1851081502" target="_blank" class="contact-link">Apple Podcasts</a>
+      <a href="https://ihack-audio.netlify.app" target="_blank" class="contact-link">iHack Audio</a>
+      <a href="https://github.com/iHackAudio" target="_blank" class="contact-link">GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+     ═══════════════════════════════════════════ -->
+<footer>
+  <div class="footer-brand">Shahnam <span>Jilan</span></div>
+  <div class="footer-note">Built by hand. No template.</div>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════ -->
+<script>
+// Scroll reveal
+const revealEls = document.querySelectorAll('.reveal, .float-in-left, .float-in-right');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }});
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+revealEls.forEach(el => revealObs.observe(el));
+
+// Number count-up
+const numberEls = document.querySelectorAll('.number-val[data-target]');
+const numberObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target;
+    const target = parseInt(el.dataset.target);
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix || '';
+    const duration = 1800;
+    const start = performance.now();
+    const animate = (now) => {
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(eased * target);
+      el.textContent = prefix + current.toLocaleString() + suffix;
+      if (progress < 1) requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+    numberObs.unobserve(el);
+  });
+}, { threshold: 0.5 });
+numberEls.forEach(el => numberObs.observe(el));
+
+// Mobile nav
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('nav')) document.querySelector('.nav-links')?.classList.remove('show');
+});
+</script>
+</body>
+</html>
