@@ -69,7 +69,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .btn-secondary{font-family:var(--mono);font-size:12px;letter-spacing:1px;padding:14px 28px;border:1px solid var(--border-accent);color:var(--text-3);transition:var(--transition);display:inline-block;background:none;cursor:pointer}
 .btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
 .hero-photo{position:relative}
-.hero-photo img{width:320px;height:400px;object-fit:cover;border:1px solid var(--border);filter:grayscale(20%) contrast(1.05)}
+.hero-photo img{width:320px;height:auto;aspect-ratio:4/5;object-fit:cover;border:1px solid var(--border);filter:grayscale(20%) contrast(1.05)}
 .hero-photo::after{content:'';position:absolute;inset:0;border:1px solid var(--accent);opacity:0.15;transform:translate(12px,12px);pointer-events:none}
 .hero-badges{display:flex;gap:10px;flex-wrap:wrap;padding-top:24px;border-top:1px solid var(--border)}
 .badge{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;background:var(--bg-3);border:1px solid var(--border);color:var(--text-4)}
@@ -100,7 +100,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .teaser-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px}
 .teaser-card{background:var(--bg-2);border:1px solid var(--border);overflow:hidden;transition:var(--transition);cursor:pointer}
 .teaser-card:hover{border-color:var(--border-accent);transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.4)}
-.teaser-card img{width:100%;height:200px;object-fit:cover;border-bottom:1px solid var(--border)}
+.teaser-card img{width:100%;aspect-ratio:16/9;object-fit:cover;border-bottom:1px solid var(--border)}
 .teaser-card-body{padding:20px}
 .teaser-card-tag{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
 .teaser-card-title{font-family:var(--mono);font-size:14px;color:var(--text-1);font-weight:700;margin-bottom:8px;line-height:1.3}
@@ -140,7 +140,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .case-studies{display:flex;flex-direction:column;gap:20px}
 .case-study{background:var(--bg-2);border:1px solid var(--border);overflow:hidden;transition:var(--transition)}
 .case-study:hover{border-color:var(--border-accent)}
-.case-study img{width:100%;height:180px;object-fit:cover;border-bottom:1px solid var(--border)}
+.case-study img{width:100%;aspect-ratio:16/9;object-fit:cover;border-bottom:1px solid var(--border)}
 .case-study-body{padding:18px}
 .case-study-tag{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);margin-bottom:6px}
 .case-study-title{font-family:var(--mono);font-size:13px;color:var(--text-1);font-weight:700;margin-bottom:6px}
@@ -255,7 +255,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
      ═══════════════════════════════════════════ -->
 <nav>
   <div class="nav-logo">
-    <img src="assets/images/ihack-logo.png" alt="iHack Audio">
+    <img loading="lazy" src="assets/images/ihack-logo.png" alt="iHack Audio">
     <span>Shahnam Jilan</span>
   </div>
   <ul class="nav-links">
@@ -296,7 +296,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
       </div>
     </div>
     <div class="hero-photo reveal">
-      <img src="ihack app phtos/Shahnam Hossain Jilan 2.png" alt="Shahnam Hossain Jilan">
+      <img loading="lazy" src="assets/optimized/hero-photo.webp" alt="Shahnam Hossain Jilan">
     </div>
   </div>
 </section>
@@ -344,7 +344,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
   </div>
   <div class="teaser-grid">
     <div class="teaser-card reveal">
-      <img src="ihack app phtos/iHack Audio Main Ecosystem UI.png" alt="iHack Audio Ecosystem">
+      <img loading="lazy" src="assets/optimized/ecosystem.webp" alt="iHack Audio Ecosystem">
       <div class="teaser-card-body">
         <div class="teaser-card-tag">Full Ecosystem</div>
         <div class="teaser-card-title">iHack Audio Platform</div>
@@ -352,7 +352,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
       </div>
     </div>
     <div class="teaser-card reveal reveal-delay-1">
-      <img src="ihack app phtos/ihack Audio podcast automation.png" alt="Contextual Scripting">
+      <img loading="lazy" src="assets/optimized/contextual-scripting.webp" alt="Contextual Scripting">
       <div class="teaser-card-body">
         <div class="teaser-card-tag">Script Intelligence</div>
         <div class="teaser-card-title">Contextual Scripting</div>
@@ -360,7 +360,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
       </div>
     </div>
     <div class="teaser-card reveal reveal-delay-2">
-      <img src="ihack app phtos/SKY SKYLAR_AirPilot__AUDIT RESULT.png" alt="Forensic Audit">
+      <img loading="lazy" src="assets/optimized/audit-result.webp" alt="Forensic Audit">
       <div class="teaser-card-body">
         <div class="teaser-card-tag">Quality</div>
         <div class="teaser-card-title">Forensic Audit Lab</div>
@@ -469,7 +469,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
     </div>
     <div class="case-studies">
       <div class="case-study reveal">
-        <img src="ihack app phtos/iHack Audio Main Ecosystem UI.png" alt="iHack Audio Ecosystem">
+        <img loading="lazy" src="assets/optimized/ecosystem.webp" alt="iHack Audio Ecosystem">
         <div class="case-study-body">
           <div class="case-study-tag">Platform</div>
           <div class="case-study-title">iHack Audio Ecosystem</div>
@@ -477,7 +477,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
         </div>
       </div>
       <div class="case-study reveal reveal-delay-1">
-        <img src="ihack app phtos/ihack Audio podcast automation.png" alt="Podcast Automation">
+        <img loading="lazy" src="assets/optimized/podcast-automation.webp" alt="Podcast Automation">
         <div class="case-study-body">
           <div class="case-study-tag">Automation</div>
           <div class="case-study-title">Podcast Automation Pipeline</div>
@@ -485,7 +485,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
         </div>
       </div>
       <div class="case-study reveal reveal-delay-2">
-        <img src="ihack app phtos/iHack Audio Sound Design.png" alt="Sound Design">
+        <img loading="lazy" src="assets/optimized/spatial-map.webp" alt="Sound Design">
         <div class="case-study-body">
           <div class="case-study-tag">Spatial Audio</div>
           <div class="case-study-title">3D Sound Design</div>

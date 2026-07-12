@@ -65,10 +65,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 
 /* Image side */
 .build-image{position:relative;overflow:hidden}
-.build-image img{width:100%;border:1px solid var(--border);transition:var(--transition)}
-.build-image:hover img{border-color:var(--border-accent);transform:scale(1.02)}
+.build-image img{width:100%;aspect-ratio:16/9;object-fit:cover;border:1px solid var(--border);transition:var(--transition)}
+.build-image:hover img{border-color:var(--border-accent)}
 .build-image::after{content:'';position:absolute;inset:0;border:1px solid var(--accent);opacity:0;transition:var(--transition);pointer-events:none}
 .build-image:hover::after{opacity:0.15}
+.build-image-group{display:flex;gap:12px;margin-top:12px}
+.build-image-group img{width:calc(50% - 6px);aspect-ratio:16/9;object-fit:cover;border:1px solid var(--border);transition:var(--transition)}
+.build-image-group img:hover{border-color:var(--border-accent)}
 
 /* Content side */
 .build-content{max-width:520px}
@@ -135,7 +138,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
 <!-- NAV -->
 <nav>
   <div class="nav-logo">
-    <img src="assets/images/ihack-logo.png" alt="iHack Audio">
+    <img loading="lazy" src="assets/images/ihack-logo.png" alt="iHack Audio">
     <span>Shahnam Jilan</span>
   </div>
   <ul class="nav-links">
@@ -163,7 +166,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
 <section class="build-section">
   <div class="build-inner">
     <div class="build-image float-in-left">
-      <img src="ihack app phtos/iHack Audio Main Ecosystem UI.png" alt="iHack Audio Ecosystem">
+      <img loading="lazy" src="assets/optimized/ecosystem.webp" alt="iHack Audio Ecosystem">
     </div>
     <div class="build-content float-in-right">
       <span class="build-tag purple">Full Ecosystem</span>
@@ -189,7 +192,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
 <section class="build-section reverse">
   <div class="build-inner">
     <div class="build-image float-in-right">
-      <img src="ihack app phtos/ihack Audio podcast automation.png" alt="Contextual Scripting">
+      <img loading="lazy" src="assets/optimized/contextual-scripting.webp" alt="Contextual Scripting">
     </div>
     <div class="build-content float-in-left">
       <span class="build-tag blue">Script Intelligence</span>
@@ -215,7 +218,11 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
 <section class="build-section">
   <div class="build-inner">
     <div class="build-image float-in-left">
-      <img src="Buildig AI AUDIO EDITOR/Analysis UI.png" alt="AI Audio Auditor">
+      <img loading="lazy" src="assets/optimized/editor-analysis.webp" alt="AI Audio Auditor">
+      <div class="build-image-group">
+        <img loading="lazy" src="assets/optimized/editor-cuts.webp" alt="Cut Selection">
+        <img loading="lazy" src="assets/optimized/editor-perfect.webp" alt="Perfect Cut">
+      </div>
     </div>
     <div class="build-content float-in-right">
       <span class="build-tag green">Quality Control <span style="opacity:0.5;font-size:8px;margin-left:4px">IN DEVELOPMENT</span></span>
@@ -235,17 +242,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
   </div>
 </section>
 
-<!-- AUDITOR SCREENSHOTS -->
-<section class="build-section reverse" style="padding-top:0;border-top:none">
-  <div class="build-inner">
-    <div class="build-image float-in-left">
-      <img src="Buildig AI AUDIO EDITOR/Cut selection.png" alt="Cut Selection">
-    </div>
-    <div class="build-image float-in-right">
-      <img src="Buildig AI AUDIO EDITOR/Example of perfect cut.png" alt="Perfect Cut Example">
-    </div>
-  </div>
-</section>
+
 
 <!-- ═══════════════════════════════════════════
      BUILD 4: SCRIPT DIRECTOR + JOJO
@@ -253,7 +250,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
 <section class="build-section reverse">
   <div class="build-inner">
     <div class="build-image float-in-right">
-      <img src="ihack app phtos/MAIN UI 1.png" alt="Script Director + Jojo">
+      <img loading="lazy" src="assets/optimized/script-director.webp" alt="Script Director + Jojo">
     </div>
     <div class="build-content float-in-left">
       <span class="build-tag gold">Voice + Script</span>
@@ -280,7 +277,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
 <section class="build-section">
   <div class="build-inner">
     <div class="build-image float-in-left">
-      <img src="ihack app phtos/ihack Audio podcast automation 2.png" alt="Podcast Automation">
+      <img loading="lazy" src="assets/optimized/podcast-automation.webp" alt="Podcast Automation">
     </div>
     <div class="build-content float-in-right">
       <span class="build-tag green">Automation</span>
@@ -305,7 +302,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
 <section class="build-section reverse">
   <div class="build-inner">
     <div class="build-image float-in-right">
-      <img src="ihack app phtos/iHack Audio Sound Design.png" alt="3D Spatial Map Engine">
+      <img loading="lazy" src="assets/optimized/spatial-map.webp" alt="3D Spatial Map Engine">
     </div>
     <div class="build-content float-in-left">
       <span class="build-tag blue">Spatial Audio</span>
@@ -332,7 +329,11 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
 <section class="build-section">
   <div class="build-inner">
     <div class="build-image float-in-left">
-      <img src="ihack app phtos/SKY SKYLAR_AirPilot__AUDIT RESULT.png" alt="Forensic Audit Lab">
+      <img loading="lazy" src="assets/optimized/audit-result.webp" alt="Forensic Audit Lab">
+      <div class="build-image-group">
+        <img loading="lazy" src="assets/optimized/audit-cinematic.webp" alt="Cinematic Audit">
+        <img loading="lazy" src="assets/optimized/audio-analyzer.webp" alt="Audio Analyzer">
+      </div>
     </div>
     <div class="build-content float-in-right">
       <span class="build-tag gold">Character Analysis</span>
@@ -352,17 +353,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
   </div>
 </section>
 
-<!-- AUDIT RESULT SCREENSHOT -->
-<section class="build-section reverse" style="padding-top:0;border-top:none">
-  <div class="build-inner">
-    <div class="build-image float-in-right">
-      <img src="ihack app phtos/CINEMATIC STORY & SOUND_SAMPLE_SAMPLE_AUDIT RESULT.png" alt="Audit Result">
-    </div>
-    <div class="build-image float-in-left">
-      <img src="ihack app phtos/audio analyzer.png" alt="Audio Analyzer">
-    </div>
-  </div>
-</section>
+
 
 <!-- FOOTER -->
 <footer>
