@@ -78,12 +78,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 
 /* NUMBERS */
 #numbers{background:var(--bg-0);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.numbers-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--border)}
+.numbers-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border)}
 .number-item{background:var(--bg-1);padding:28px 16px;text-align:center;transition:var(--transition);position:relative;overflow:hidden}
 .number-item::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transition:var(--transition)}
 .number-item:hover::before{transform:scaleX(1)}
 .number-item:hover{background:var(--bg-2)}
 .number-val{font-family:var(--mono);font-size:clamp(16px,2vw,20px);font-weight:700;color:var(--accent);display:block;line-height:1;margin-bottom:6px;transition:var(--transition)}
+.number-val.accent-text{font-size:clamp(11px,1.3vw,14px);color:var(--gold);letter-spacing:0.5px;font-weight:700}
 .number-item:hover .number-val{color:#7dd3fc;text-shadow:var(--glow-accent)}
 .number-lbl{font-size:clamp(8px,1vw,10px);color:var(--text-4);text-transform:uppercase;letter-spacing:1px;line-height:1.5}
 
@@ -213,7 +214,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
   .hero-photo img{width:240px;height:300px}
   .hero-photo::after{display:none}
   #numbers{overflow-x:auto}
-  .numbers-grid{grid-template-columns:repeat(6,minmax(140px,1fr))}
+  .numbers-grid{grid-template-columns:repeat(5,minmax(120px,1fr))}
   #builds-teaser,#work,#experience,#contact{padding:60px 24px}
   #foundation,#stack{padding:60px 24px}
   .teaser-grid{grid-template-columns:1fr 1fr}
@@ -223,7 +224,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
   footer{padding:20px 24px;flex-direction:column;gap:10px;text-align:center}
 }
 @media(max-width:500px){
-  .numbers-grid{grid-template-columns:repeat(3,1fr)}
+  .numbers-grid{grid-template-columns:1fr 1fr}
   .hero-name{font-size:28px;letter-spacing:-1px}
   .contact-links{flex-direction:column;align-items:center}
   .teaser-grid{grid-template-columns:1fr}
@@ -285,6 +286,10 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
 <section id="numbers">
   <div class="numbers-grid">
     <div class="number-item reveal">
+      <span class="number-val" data-target="8">0</span>
+      <span class="number-lbl">Years Experience</span>
+    </div>
+    <div class="number-item reveal reveal-delay-1">
       <span class="number-val" data-target="20000" data-suffix="+">0</span>
       <span class="number-lbl">Listening Hours</span>
     </div>
@@ -292,21 +297,12 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
       <span class="number-val" data-target="3000" data-suffix="+">0</span>
       <span class="number-lbl">Episodes</span>
     </div>
-    <div class="number-item reveal reveal-delay-1">
+    <div class="number-item reveal reveal-delay-2">
       <span class="number-val" data-target="50" data-suffix="+">0</span>
       <span class="number-lbl">Audiobooks</span>
     </div>
     <div class="number-item reveal reveal-delay-2">
-      <span class="number-val">AI AUDIO</span>
-      <span class="number-lbl">Production</span>
-    </div>
-    <div class="number-item reveal reveal-delay-2">
-      <span class="number-val">AUTOMATION</span>
-      <span class="number-lbl">with Intelligence</span>
-    </div>
-    <div class="number-item reveal reveal-delay-3">
-      <span class="number-val">TOP AI</span>
-      <span class="number-lbl">Podcast</span>
+      <span class="number-val accent-text">AI AUDIO Production & Automation</span>
     </div>
   </div>
 </section>
