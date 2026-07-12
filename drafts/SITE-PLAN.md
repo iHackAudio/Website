@@ -160,10 +160,10 @@ All applied:
 
 ---
 
-## Questions Before Building
+## Decisions Made
 
-1. Which personal photo is your favorite? (1-5) — I'll use it in the hero
-2. Do you have a logo for iHack Audio? Or just the "iH·" monogram?
-3. Want the platform deep-dive on the same page or a separate /platform page?
-4. Any specific Apple Podcasts episodes to feature?
-5. Before/after waveform — do you have one? (The xAI prep mentioned this)
+- [x] Hero photo: #2 (Shahnam Hossain Jilan 2.png)
+- [ ] iHack Audio logo: TBD (using "iH·" monogram for now)
+- [x] Builds page: Separate `/builds` page with zigzag layout
+- [ ] Apple Podcasts episodes to feature: TBD
+- [ ] Before/after waveform: TBD
