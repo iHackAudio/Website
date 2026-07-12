@@ -1,6 +1,6 @@
 # CSS MAP — Portfolio Customization Reference
 
-> Last updated: All sections complete (landing + builds page)
+> Last updated: All sections final
 
 ---
 
@@ -31,230 +31,156 @@
 | `--mono` | `'Space Mono', monospace` | Monospace font |
 | `--sans` | `'Inter', sans-serif` | Sans-serif font |
 | `--transition` | `all 0.3s cubic-bezier(0.4,0,0.2,1)` | Default transition |
+| `--glow-accent` | `0 0 20px rgba(56,189,248,0.3), 0 0 60px rgba(56,189,248,0.1)` | Blue glow |
+| `--glow-purple` | `0 0 20px rgba(124,58,237,0.3), 0 0 60px rgba(124,58,237,0.1)` | Purple glow |
+| `--glow-gold` | `0 0 20px rgba(251,191,36,0.3), 0 0 60px rgba(251,191,36,0.1)` | Gold glow |
+| `--glow-green` | `0 0 20px rgba(74,222,128,0.3), 0 0 60px rgba(74,222,128,0.1)` | Green glow |
 
 ---
 
 ## Section Index
 
-| # | Section | ID | File Location | Description |
-|---|---------|-----|---------------|-------------|
-| 1 | Hero + About Me | `#hero` | index.html | Landing viewport with name, title, photo |
-| 2 | The Numbers | `#numbers` | index.html | Horizontal impact strip |
-| 3 | What I Built (Teaser) | `#builds-teaser` | index.html | 2-3 featured builds + CTA |
-| 4 | Built on $0 | `#foundation` | index.html | Obstacles narrative |
-| 5 | Published Work | `#work` | index.html | Podcasts, audiobooks, audio players |
-| 6 | Technical Stack | `#stack` | index.html | Two-column tools layout |
+| # | Section | ID | File | Description |
+|---|---------|-----|------|-------------|
+| 1 | Hero + About Me | `#hero` | index.html | Name, title, about, photo |
+| 2 | Stats Strip | `#numbers` | index.html | Horizontal impact strip |
+| 3 | Builds Teaser | `#builds-teaser` | index.html | 4 cards → CTA to builds.html |
+| 4 | Foundation | `#foundation` | index.html | "Built everything. Spent nothing." |
+| 5 | Published Work | `#work` | index.html | Audio players + Apple Podcasts |
+| 6 | Technical Stack | `#stack` | index.html | Horizontal chip boxes |
 | 7 | Experience | `#experience` | index.html | Timeline |
 | 8 | Contact | `#contact` | index.html | CTA + links |
-| 9 | Builds Deep Dive | `#builds` | builds.html | Zigzag alternating layout |
+| 9 | Builds Deep Dive | builds.html | builds.html | Zigzag alternating layout |
 
 ---
 
 ## Section 1: Hero + About Me (`#hero`)
 
-**Layout:** Full viewport, centered content with photo
-**Key selectors:**
-- `#hero` — Section container
-- `.hero-inner` — Content wrapper
-- `.hero-name` — Name heading
-- `.hero-role` — Title/role line
-- `.hero-statement` — One-liner description
-- `.hero-about` — About me paragraph
-- `.hero-photo` — Profile photo container
-- `.hero-bg` — Background gradient overlay
-- `.hero-grid` — Grid pattern overlay
+- `.hero-name` — Name heading (Space Mono, clamp 32-64px)
+- `.hero-role` — Title line (accent color, uppercase)
+- `.hero-statement` — One-liner
+- `.hero-about` — About paragraph
+- `.hero-photo img` — Profile photo (4:5 aspect, grayscale → color on hover, gold glow)
+- `.hero-badges` / `.badge` — Status badges
 
-**Customization:**
-- Change name: edit `.hero-name` content
-- Change photo: update `src` in `.hero-photo img`
-- Adjust gradient: modify `.hero-bg` background property
-- Grid opacity: modify `.hero-grid` opacity
+## Section 2: Stats Strip (`#numbers`)
 
----
+- 5 items in a grid
+- `.number-val` — Blue accent, clamp 16-20px, count-up animation
+- `.number-lbl` — Gold color, clamp 8-10px, uppercase
+- Items: 8 Years, 10,000+ Hours, 3000+ Episodes, 50+ Audiobooks, AI AUDIO Production & Automation
+- Hover: blue glow on values
 
-## Section 2: The Numbers (`#numbers`)
+## Section 3: Builds Teaser (`#builds-teaser`)
 
-**Layout:** Horizontal strip, 6 items
-**Key selectors:**
-- `#numbers` — Section container
-- `.numbers-grid` — Flex/grid container
-- `.number-item` — Individual stat
-- `.number-val` — Stat value (animated)
-- `.number-lbl` — Stat label
+- 4 cards in a grid
+- `.teaser-card` — Gold glow on hover
+- `.teaser-card-tag` — Color-coded: purple (Platform), green (Automation), gold (Contextual Agentic), blue (Quality)
+- Cards link to builds.html
+- CTA button: "Explore the Platform"
 
-**Customization:**
-- Add/remove stats: edit `.number-item` elements
-- Change values: update `data-target` attribute for count-up
-- Animation speed: modify JS `duration` in count-up function
+## Section 4: Foundation (`#foundation`)
 
----
-
-## Section 3: What I Built Teaser (`#builds-teaser`)
-
-**Layout:** 2-3 featured cards + CTA button
-**Key selectors:**
-- `#builds-teaser` — Section container
-- `.teaser-grid` — Card grid
-- `.teaser-card` — Individual build card
-- `.teaser-card img` — Build screenshot
-- `.teaser-cta` — "See all builds" button
-
----
-
-## Section 4: Built on $0 (`#foundation`)
-
-**Layout:** Split — narrative left, obstacles right
-**Key selectors:**
-- `#foundation` — Section container
-- `.foundation-grid` — Two-column grid
-- `.foundation-narrative` — Left text column
-- `.foundation-obstacles` — Right obstacles grid
-- `.obstacle-card` — Individual obstacle item
-
----
+- `.foundation-headline` — "Built everything. Spent nothing." (gold span)
+- `.foundation-body` — Narrative paragraph
+- `.foundation-tags` / `.f-tag` — Horizontal tag words (gold glow on hover)
+- Tags: No GPU owned, No cloud budget, No paid API tier, No team, No marketing spend, Solo founder, Free tier only
 
 ## Section 5: Published Work (`#work`)
 
-**Layout:** Audio players + case study cards
-**Key selectors:**
-- `#work` — Section container
-- `.audio-player` — Custom audio player wrapper
-- `.audio-player audio` — Native audio element
-- `.case-study` — Case study card
-- `.case-study img` — Case study screenshot
-
----
+- 3-column grid of audio players
+- `.audio-track` — Vertical card layout
+- `.audio-icon` — Circle play button (gold glow, play/pause toggle)
+- `.audio-name` — Track name (gold on hover)
+- `.audio-meta` — Duration info
+- `.apple-badge` — Centered Apple Podcasts link (gold glow on hover)
+- All audio files in `AUDIOCLIPS/` folder
 
 ## Section 6: Technical Stack (`#stack`)
 
-**Layout:** Two columns
-**Key selectors:**
-- `#stack` — Section container
-- `.stack-grid` — Two-column grid
-- `.stack-group` — Tool category group
-- `.stack-item` — Individual tool
-- `.stack-item.custom` — Custom-built tools (accent highlight)
-
----
+- 2-column grid
+- `.stack-group-title` — White text (Inter, 12px, uppercase, weight 600)
+- `.stack-chips` / `.stack-chip` — Horizontal chip boxes (gold glow on hover)
+- `.stack-chip.custom` — Purple text for custom-built tools (gold glow on hover)
 
 ## Section 7: Experience (`#experience`)
 
-**Layout:** Vertical timeline
-**Key selectors:**
-- `#experience` — Section container
-- `.timeline` — Timeline container
-- `.timeline-item` — Individual entry
-- `.timeline-dot` — Timeline dot
-- `.timeline-content` — Entry content
-
----
+- Timeline layout
+- `.timeline-dot` — Gold glow on hover
+- `.timeline-content` — Card with gradient top border
+- `.timeline-content.alt` — Purple gradient variant
 
 ## Section 8: Contact (`#contact`)
 
-**Layout:** Centered CTA
-**Key selectors:**
-- `#contact` — Section container
-- `.contact-headline` — Main heading
-- `.contact-links` — Link buttons
-- `.contact-link` — Individual link
+- Centered CTA
+- `.contact-link.primary` — Blue background button
+- Other links: Apple Podcasts, iHack Audio, Google Developer
 
 ---
 
 ## Page 2: Builds (`builds.html`)
 
-**Layout:** Alternating zigzag sections
-**Key selectors:**
-- `.build-section` — Full-width build section
-- `.build-section:nth-child(even)` — Reversed layout
-- `.build-image` — Screenshot container (floats in)
-- `.build-content` — Text content (floats in opposite)
-- `.build-tag` — Category tag
-- `.build-title` — Build name
-- `.build-desc` — Description
-- `.build-detail` — Expandable technical detail
+### Build Order
+1. iHack Audio — The Ecosystem (purple tag)
+2. Podcast Automation (green tag)
+3. AI Audio Auditor (green tag, "IN DEVELOPMENT", sub-images)
+4. Script Director + Jojo (gold tag, sub-images)
+5. 3D Spatial Map Engine (blue tag)
+6. Forensic Audit Lab (gold tag, studio main image, sub-images)
 
-**Customization:**
-- Reverse order: toggle `.build-section.reverse` class
-- Animation speed: modify `.reveal` transition values
-- Image position: `.build-section.reverse` flips layout
+### Layout
+- Alternating zigzag: image left/content right, then reversed
+- `.build-image img` — 16:9 aspect ratio
+- `.build-image-group` — 2 half-size sub-images under main
+- `.build-tag` — Color-coded category tags
+- Floating scroll animations (`.float-in-left`, `.float-in-right`)
 
 ---
 
 ## Animations
 
-| Class | Effect | Duration |
-|-------|--------|----------|
-| `.reveal` | Fade up on scroll | 0.7s |
-| `.reveal-delay-1` | Staggered reveal | +0.1s |
-| `.reveal-delay-2` | Staggered reveal | +0.2s |
-| `.reveal-delay-3` | Staggered reveal | +0.3s |
-| `.float-in-left` | Slide from left | 0.8s |
-| `.float-in-right` | Slide from right | 0.8s |
+| Class | Effect |
+|-------|--------|
+| `.reveal` | Fade up on scroll |
+| `.reveal-delay-1/2/3` | Staggered reveal |
+| `.float-in-left` | Slide from left |
+| `.float-in-right` | Slide from right |
+| `@keyframes pulse` | Green dot pulse |
+| `@keyframes glow-pulse` | Gold glow pulse (playing audio) |
 
----
+## Image Paths
+
+All relative to repo root:
+
+| Type | Path |
+|------|------|
+| Hero photo | `assets/optimized/hero-photo.webp` |
+| Logo | `assets/optimized/logo.webp` |
+| Ecosystem | `assets/optimized/ecosystem.webp` |
+| Podcast Automation | `assets/optimized/contextual-scripting.webp` |
+| Script Director | `assets/optimized/script-director.webp` |
+| Spatial Map | `assets/optimized/spatial-map.webp` |
+| Audit Result | `assets/optimized/audit-result.webp` |
+| Audit Cinematic | `assets/optimized/audit-cinematic.webp` |
+| Editor Analysis | `assets/optimized/editor-analysis.webp` |
+| Editor Cuts | `assets/optimized/editor-cuts.webp` |
+| Editor Perfect | `assets/optimized/editor-perfect.webp` |
+| Audio Analyzer | `assets/optimized/audio-analyzer.webp` |
+| Sub-images | `assets/optimized/sub-*.webp` |
+
+## Audio Files
+
+| File | Used As |
+|------|---------|
+| `PODCAST_AIRWAYS_SKY SKYLAR.mp3` | Podcast track 1 & 3 |
+| `CINEMATIC STORY & SOUND_SAMPLE.mp3` | Podcast track 2 |
+| `Audiobook  Blink and Gone_SAMPLE.mp3` | Audiobook track 1 |
+| `Audiobook 3D Sound design_SAMPLE.mp3` | Audiobook track 2 |
+| `Audiobook Cinematic Pace_SAMPLE.mp3` | Audiobook track 3 |
 
 ## Responsive Breakpoints
 
-| Breakpoint | Layout Change |
-|------------|---------------|
-| `≤900px` | 2-column → 1-column, nav collapses |
-| `≤500px` | Further simplification, stacked layout |
-
----
-
-## Audio Player
-
-Custom styled `<audio>` elements. To add new audio:
-```html
-<div class="audio-player">
-  <span class="audio-title">Track Name</span>
-  <audio controls src="AUDIOCLIPS/filename.mp3"></audio>
-</div>
-```
-
----
-
-## Builds Page (builds.html)
-
-### Page Header
-- `.page-header` — Top section with title
-- `.page-header h1` — Page title
-
-### Build Sections
-- `.build-section` — Full-width alternating section
-- `.build-section:nth-child(even)` — Dark background variant
-- `.build-section.reverse` — Flips image/content sides
-- `.build-inner` — Grid container (2 columns)
-- `.build-image` — Screenshot container with hover effect
-- `.build-content` — Text content area
-- `.build-tag` — Category tag (`.blue`, `.purple`, `.gold`, `.green`)
-- `.build-num` — Section number (01–08)
-- `.build-title` — Build name
-- `.build-title .accent` — Blue accent text
-- `.build-title .purple-text` — Purple accent text
-- `.build-title .gold-text` — Gold accent text
-- `.build-desc` — Description paragraph
-- `.build-detail` — Technical detail box
-- `.build-detail.purple-border` — Purple left border
-- `.build-detail.gold-border` — Gold left border
-- `.build-detail.green-border` — Green left border
-
-### Customization
-- Swap images: update `src` in `.build-image img`
-- Change accent colors: modify `.build-tag` class
-- Reverse layout: add/remove `.reverse` class on `.build-section`
-- Animation direction: `.float-in-left` / `.float-in-right`
-
----
-
-## Image Paths Reference
-
-All images are relative to repo root:
-
-**Personal photos:** `ihack app phtos/Shahnam Hossain Jilan [1-5].png`
-**App screenshots:** `ihack app phtos/Main app - *.png`
-**Ecosystem UI:** `ihack app phtos/iHack Audio Main Ecosystem UI.png`
-**Audit results:** `ihack app phtos/*AUDIT RESULT.png`
-**Audio editor:** `Buildig AI AUDIO EDITOR/*.png`
-**Audio clips:** `AUDIOCLIPS/*.mp3`
-**Logo:** `assets/images/ihack-logo.png`
+| Breakpoint | Changes |
+|------------|---------|
+| `≤900px` | Nav collapses, 2-col grids, stacked layout |
+| `≤500px` | Single column, smaller stats |
