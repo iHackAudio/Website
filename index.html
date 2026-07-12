@@ -124,7 +124,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 
 /* PUBLISHED WORK */
 #work{padding:100px 60px;max-width:1200px;margin:0 auto}
-.work-layout{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.work-layout{max-width:700px;margin:0 auto}
 .audio-section h3{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--text-4);margin-bottom:24px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .audio-tracks{display:flex;flex-direction:column;gap:16px}
 .audio-track{display:flex;align-items:center;gap:16px;padding:12px 0;transition:var(--transition)}
@@ -145,14 +145,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .apple-badge svg{width:24px;height:24px;fill:var(--text-2)}
 .apple-badge-text{font-family:var(--mono);font-size:11px;color:var(--text-3);letter-spacing:0.5px}
 .apple-badge-text strong{color:var(--text-1);display:block;font-size:12px}
-.case-studies{display:flex;flex-direction:column;gap:20px}
-.case-study{background:var(--bg-2);border:1px solid var(--border);overflow:hidden;transition:var(--transition)}
-.case-study:hover{border-color:var(--border-accent);transform:translateY(-3px)}
-.case-study img{width:100%;aspect-ratio:16/9;object-fit:cover;border-bottom:1px solid var(--border)}
-.case-study-body{padding:18px}
-.case-study-tag{font-family:var(--mono);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--purple);margin-bottom:6px}
-.case-study-title{font-family:var(--mono);font-size:13px;color:var(--text-1);font-weight:700;margin-bottom:6px}
-.case-study-desc{font-size:11px;color:var(--text-4);line-height:1.7}
+
 
 /* TECHNICAL STACK */
 #stack{padding:100px 60px;background:var(--bg-0);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
@@ -464,32 +457,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
         </div>
       </a>
     </div>
-    <div class="case-studies">
-      <div class="case-study reveal">
-        <img loading="lazy" src="assets/optimized/ecosystem.webp" alt="iHack Audio Ecosystem">
-        <div class="case-study-body">
-          <div class="case-study-tag">Platform</div>
-          <div class="case-study-title">iHack Audio Ecosystem</div>
-          <div class="case-study-desc">Complete production layer — from script generation to mastered output. 8 modules, 5 agents, forensic audit.</div>
-        </div>
-      </div>
-      <div class="case-study reveal reveal-delay-1">
-        <img loading="lazy" src="assets/optimized/podcast-automation.webp" alt="Podcast Automation">
-        <div class="case-study-body">
-          <div class="case-study-tag">Automation</div>
-          <div class="case-study-title">Podcast Automation Pipeline</div>
-          <div class="case-study-desc">Title to publication-ready episode in 4–6 minutes. Script, voice, audit, mastering — fully automated.</div>
-        </div>
-      </div>
-      <div class="case-study reveal reveal-delay-2">
-        <img loading="lazy" src="assets/optimized/spatial-map.webp" alt="Sound Design">
-        <div class="case-study-body">
-          <div class="case-study-tag">Spatial Audio</div>
-          <div class="case-study-title">3D Sound Design</div>
-          <div class="case-study-desc">Line-by-line spatial audio mapping. Ambient beds, SFX placement, stereo field, A24/Dolby Atmos target.</div>
-        </div>
-      </div>
-    </div>
+
   </div>
 </section>
 
