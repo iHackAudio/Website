@@ -10,13 +10,12 @@
 
 ## Site Structure
 
-### Page 1 — Landing (Single-Page Portfolio)
+### Page 1 — Landing (index.html)
 
-**Section 1: Hero**
-- Full viewport. Minimal.
-- Name: SHAHNAM HOSSAIN JILAN
-- Title: AI Audio Systems Architect
-- One-liner: "I build systems that teach AI to understand, produce, and validate audio at broadcast quality."
+**Section 1: Hero + About Me**
+- Full viewport. Name, title, one-liner.
+- Below the fold: short "About Me" paragraph — who you are, what you do, your philosophy.
+- Personal photo (best of 1-5) integrated into the layout.
 - Subtle animated waveform or audio visualization as background element (CSS/canvas, no heavy libs)
 - Scroll indicator
 
@@ -25,20 +24,10 @@
 - 8 Years Production · 20K+ Listening Hours · 900+ Upwork Hours (Top Rated) · #1 Apple Podcasts · 8 Modules Built · 5 AI Agents Orchestrated
 - Numbers animate on scroll (count-up effect)
 
-**Section 3: What I Built — iHack Audio Platform**
-- Section header: "iHack Audio Platform v3.0.0"
-- Subtext: "End-to-end AI audio production infrastructure. Not a wrapper. Not a chatbot."
-- Visual grid of modules (cards with icons):
-  1. Multi-Agent Swarm Orchestrator
-  2. Audio Studio Pro — Semantic Editing Engine
-  3. QuadCore — Parallel Narration Engine
-  4. Quality — Verified, Not Theorized
-  5. 3D Spatial Map Engine
-  6. Contextual Scripting Automation
-  7. Automated Studio — One-Click Pipeline
-  8. Maya LoRA — Voice Lab & Acoustic Fingerprinting
-- Each card: icon, name, 1-line description, expandable detail
-- Screenshots from `ihack app phtos/` embedded as visual proof
+**Section 3: What I Built — Teaser + Link**
+- Brief showcase: 2-3 featured builds with preview images
+- CTA: "See the full platform" → links to `/builds` page
+- Keeps the landing page focused and scannable
 
 **Section 4: The Foundation — Built on $0**
 - Split layout: left = narrative, right = obstacles grid
@@ -76,13 +65,34 @@
 
 ---
 
-### Page 2 — /platform (Deep Dive)
+### Page 2 — /builds (What I Built — Deep Dive)
 
-- Dedicated page for iHack Audio Platform v3.0.0
-- Full module breakdown with screenshots
-- Architecture diagram (if you provide one, or I can create an SVG)
-- Technical detail for each module
-- Links back to main portfolio
+**Layout: Alternating Zigzag Sections**
+
+Each build gets its own full-width section with:
+- Floating animation on scroll (fade + slide in)
+- Colored accent text for key phrases
+- Alternating layout:
+  ```
+  ----------------------------------------------
+  |  Image    |  Title + Description            |
+  ----------------------------------------------
+  |  Title + Description  |  Image              |
+  ----------------------------------------------
+  ```
+- Each section has: purpose, what it does, how it works, screenshot
+
+**Builds to feature:**
+1. Jojo — Voice-Native Application Controller
+2. Audiopook Production Engine
+3. Podcast Automation
+4. AI Audio Auditor — Contextual Audio Editing
+5. Script Director (with Kinetic Notation)
+6. QuadCore — Parallel Narration Engine
+7. Maya LoRA — Voice Lab & Acoustic Fingerprinting
+8. 3D Spatial Map Engine
+
+Each build = its own zigzag section with purpose description + screenshot from `ihack app phtos/` or `Buildig AI AUDIO EDITOR/`
 
 ---
 
