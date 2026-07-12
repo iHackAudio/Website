@@ -83,9 +83,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .number-item::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transition:var(--transition)}
 .number-item:hover::before{transform:scaleX(1)}
 .number-item:hover{background:var(--bg-2)}
-.number-val{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);display:block;line-height:1;margin-bottom:6px;transition:var(--transition)}
+.number-val{font-family:var(--mono);font-size:clamp(16px,2vw,20px);font-weight:700;color:var(--accent);display:block;line-height:1;margin-bottom:6px;transition:var(--transition)}
 .number-item:hover .number-val{color:#7dd3fc;text-shadow:var(--glow-accent)}
-.number-lbl{font-size:9px;color:var(--text-4);text-transform:uppercase;letter-spacing:1px;line-height:1.5}
+.number-lbl{font-size:clamp(8px,1vw,10px);color:var(--text-4);text-transform:uppercase;letter-spacing:1px;line-height:1.5}
 
 /* SECTION HEADERS */
 .section-header{margin-bottom:56px}
