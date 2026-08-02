@@ -7,8 +7,9 @@
 <meta name="description" content="Deep dive into the iHack Audio platform — 8 production modules, all built from zero.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="icon" href="assets/images/ihack-logo.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@500&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════
    RESET & GLOBALS
@@ -94,11 +95,58 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 40px;height:64px;d
 .build-detail-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-4);margin-bottom:8px}
 .build-detail strong{color:var(--text-3)}
 
+.build-audio{
+  width:100%;
+  margin-top:20px;
+  accent-color:var(--accent);
+}
 /* Separator */
 .build-sep{max-width:1200px;margin:0 auto;padding:0 60px}
 .build-sep-line{height:1px;background:linear-gradient(to right,transparent,var(--border),transparent)}
 
+/* ═══════════════════════════════════════════
+   FLIP CARD
+   ═══════════════════════════════════════════ */
+.flip-section{padding:80px 60px;text-align:center;border-top:1px solid var(--border);background:var(--bg-0)}
+.flip-section h3{font-family:var(--mono);font-size:clamp(20px,3vw,28px);color:var(--text-1);margin-bottom:8px}
+.flip-section p{color:var(--text-3);margin-bottom:32px;font-size:15px}
+.card-scene{width:320px;height:180px;margin:0 auto;perspective:1200px;cursor:pointer}
+.card-inner{
+  width:100%;height:100%;position:relative;
+  transform-style:preserve-3d;
+  transition:transform .75s cubic-bezier(.4,0,.2,1);
+}
+.card-scene:hover .card-inner{transform:rotateY(-180deg)}
+.card-f,.card-b{
+  position:absolute;inset:0;border-radius:10px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;
+  -webkit-backface-visibility:hidden;backface-visibility:hidden;
+  padding:1.5rem;
+}
+/* Front Face: Architect (Blue Theme) */
+.card-f{
+  background:linear-gradient(135deg,var(--bg-2),var(--bg-3));
+  border:1px solid var(--border-accent);
+  transform:rotateY(0deg);
+}
+/* Back Face: Human (Gold Theme) */
+.card-b{
+  background:linear-gradient(135deg,#14100A,#1E1710);
+  border:1px solid rgba(232,168,56,.3);
+  transform:rotateY(180deg);
+}
+.face-ico{font-size:1.7rem}
+.face-lbl{font-size:1.1rem;font-weight:700}
+.face-sub{font-size:.78rem}
+/* Architect Face styles */
+.card-f .face-lbl{font-family:var(--mono);color:var(--accent)}
+.card-f .face-sub{font-family:var(--sans);color:var(--text-4)}
+/* Human Face styles */
+.card-b .face-lbl{font-family:'Playfair Display',serif;color:#E8A838}
+.card-b .face-sub{font-family:'DM Sans',sans-serif;color:#7A6E62}
+
 /* BACK LINK */
+.back-link-container{padding:0 60px 40px;max-width:1200px;margin:-40px auto 0}
 .back-link{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--text-4);margin-bottom:20px;transition:var(--transition)}
 .back-link:hover{color:var(--accent)}
 
@@ -124,6 +172,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
   .page-header{padding:120px 24px 60px}
   .build-section{padding:60px 24px}
   .build-inner{grid-template-columns:1fr;gap:32px}
+  .back-link-container{padding:0 24px 40px}
   .build-section.reverse .build-inner{direction:ltr}
   .build-content{max-width:100%}
   footer{padding:20px 24px;flex-direction:column;gap:10px;text-align:center}
@@ -159,6 +208,10 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
     <p>End-to-end AI audio production infrastructure. 8 modules, all built from zero budget. Every system operational. Every output verified.</p>
   </div>
 </section>
+
+<div class="back-link-container">
+  <a href="Untitled-1.html" class="back-link">← Back to Human Side</a>
+</div>
 
 <!-- ═══════════════════════════════════════════
      BUILD 1: iHACK AUDIO — FULL ECOSYSTEM
@@ -264,6 +317,32 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
 </section>
 
 <!-- ═══════════════════════════════════════════
+     BUILD 6: VOICE CLONING & SYNTHESIS
+     ═══════════════════════════════════════════ -->
+<section class="build-section reverse">
+  <div class="build-inner">
+    <div class="build-image float-in-right">
+      <img loading="lazy" src="assets/optimized/voice-cloning.webp" alt="Voice Cloning & Synthesis">
+      <div class="build-image-group">
+        <img loading="lazy" src="assets/optimized/voice-input.webp" alt="Voice Input">
+        <img loading="lazy" src="assets/optimized/voice-output.webp" alt="Synthesized Output">
+      </div>
+    </div>
+    <div class="build-content float-in-left">
+      <span class="build-tag blue">Voice Synthesis</span>
+      <div class="build-num">06</div>
+      <h2 class="build-title">Voice Cloning <span class="accent">+ Synthesis</span></h2>
+      <p class="build-desc">
+        High-fidelity voice cloning from just seconds of audio. Our model captures unique vocal signatures to generate new speech that is indistinguishable from the original. Perfect for dynamic content, character voices, and personalized audio experiences. Listen to a sample below.
+      </p>
+      <audio class="build-audio" controls src="assets/audio/synthesis_sample.mp3">
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
      BUILD 7: FORENSIC AUDIT LAB
      ═══════════════════════════════════════════ -->
 <section class="build-section">
@@ -277,12 +356,34 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
     </div>
     <div class="build-content float-in-right">
       <span class="build-tag gold">Character Analysis</span>
-      <div class="build-num">06</div>
+      <div class="build-num">07</div>
       <h2 class="build-title">Forensic <span class="gold-text">Audit Lab</span></h2>
       <p class="build-desc">
         <strong>Create your character. Analyze how your character performs.</strong> Forensic audits that score every dimension of vocal performance — scripting, technical quality, vocal presence, marketability — with automated scoring and actionable feedback.
       </p>
 
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FLIP CARD BACK
+     ═══════════════════════════════════════════ -->
+<section class="flip-section">
+  <h3>Two sides to the story.</h3>
+  <p>This is the architect's lab. Time to see the human side.</p>
+  <div class="card-scene" onclick="window.location.href='Untitled-1.html'">
+      <div class="card-inner">
+          <div class="card-f">
+              <span class="face-ico">⚙️</span>
+              <div class="face-lbl architect">Architect</div>
+              <div class="face-sub">Systems · Pipelines · Code</div>
+          </div>
+          <div class="card-b">
+              <span class="face-ico">👤</span>
+              <div class="face-lbl human">Human</div>
+              <div class="face-sub">Stories · Emotions · Voice</div>
+          </div>
+      </div>
   </div>
 </section>
 
