@@ -337,9 +337,7 @@ img{max-width:100%;display:block}
 .hero-sub{font-size:clamp(.95rem,2vw,1.1rem);color:var(--a-muted);max-width:460px;margin-bottom:2.5rem;line-height:1.75;opacity:0}
 .hero-btns{display:flex;gap:1rem;flex-wrap:wrap;opacity:0}
 
-#start-prompt{position:fixed;inset:0;z-index:999;display:flex;align-items:center;justify-content:center;background:rgba(8,6,4,.75);backdrop-filter:blur(12px);cursor:pointer}
-#start-btn{font-size:1.1rem;padding:1.2rem 2.5rem;animation:pulse-btn 2.2s infinite}
-@keyframes pulse-btn{0%,100%{transform:scale(1);box-shadow:0 8px 35px rgba(232,168,56,.35)}50%{transform:scale(1.04);box-shadow:0 12px 45px rgba(232,168,56,.5)}}
+
 
 /* PROBLEM */
 #problem{background:var(--a-bg2);border-top:1px solid var(--a-bord);border-bottom:1px solid var(--a-bord)}
@@ -846,10 +844,6 @@ footer{
   <div class="orb orb-b"></div>
   <div class="orb orb-c"></div>
 
-  <div id="start-prompt">
-    <button id="start-btn" class="btn btn-gold">▶ Enter the Story</button>
-  </div>
-
   <div class="wrap">
     <div class="hero-badge" id="hBadge">
       <span class="badge-dot"></span>
@@ -1350,19 +1344,11 @@ function startHero() {
     .to('#hBtns', { autoAlpha: 1, duration: 0.45, ease: 'power2.out' }, '-=0.25');
 }
 
-const startPrompt = document.getElementById('start-prompt');
 gsap.set(['#hBadge','#hSub','#hBtns','.h-lines'], { autoAlpha: 0 });
+gsap.set('.h-lines', { autoAlpha: 1 });
 
-startPrompt.addEventListener('click', () => {
-  gsap.to(startPrompt, {
-    opacity: 0, duration: 0.6, ease: 'power1.inOut',
-    onComplete: () => {
-      startPrompt.style.display = 'none';
-      gsap.set('.h-lines', { autoAlpha: 1 });
-      startHero();
-    }
-  });
-}, { once: true });
+// Start hero animation immediately
+document.addEventListener('DOMContentLoaded', startHero);
 
 // ── MATCHMEDIA: DESKTOP-ONLY SCROLL ANIMATIONS ──
 mm.add('(min-width: 800px)', () => {
