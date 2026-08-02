@@ -73,7 +73,133 @@ body{
   font-family:'DM Sans',sans-serif;
   line-height:1.65;
   overflow-x:hidden;
+  transition:background-color 0.5s ease;
 }
+body.flipped{
+  background:var(--b-bg);
+}
+
+/* ════════════════════════════════════
+   PAGE FLIPPER — 3D FULL-PAGE FLIP
+════════════════════════════════════ */
+.page-flipper{
+  perspective:1400px;
+  perspective-origin:50% 50%;
+  transform-style:preserve-3d;
+}
+.page-face{
+  transform-style:preserve-3d;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  will-change:transform;
+  transition:none;
+  position:relative;
+}
+/* Edge shadow — sells the 3D depth during flip */
+.page-face::after{
+  content:'';
+  position:absolute;top:0;bottom:0;right:0;
+  width:80px;
+  background:linear-gradient(to left,rgba(0,0,0,0.3),transparent);
+  opacity:0;
+  pointer-events:none;
+  z-index:100;
+  transition:opacity 0.3s;
+}
+body.flipping .page-front::after{
+  opacity:1;
+}
+.page-front{
+  position:relative;
+  z-index:2;
+}
+.page-back{
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  z-index:1;
+  overflow-y:auto;
+  overflow-x:hidden;
+  transform:rotateY(180deg);
+  pointer-events:none;
+}
+/* Side indicator dots */
+.side-indicator{
+  position:fixed;right:24px;top:50%;transform:translateY(-50%);z-index:1000;
+  display:flex;flex-direction:column;gap:12px;
+}
+.side-dot{
+  width:10px;height:10px;border-radius:50%;
+  border:2px solid var(--a-muted);
+  background:transparent;
+  transition:all 0.4s ease;
+  cursor:pointer;
+}
+.side-dot.active{
+  background:var(--a-gold);
+  border-color:var(--a-gold);
+  box-shadow:0 0 12px rgba(232,168,56,0.4);
+}
+body.flipped .side-dot.active{
+  background:var(--b-accent);
+  border-color:var(--b-accent);
+  box-shadow:0 0 12px rgba(56,189,248,0.4);
+}
+body.flipped .side-indicator .side-dot:first-child{
+  border-color:var(--b-t4);
+}
+body.flipped .side-indicator .side-dot:last-child{
+  border-color:var(--b-accent);
+}
+/* Mute button theme sync */
+body.flipped #muteToggle{
+  border-color:var(--b-bord);
+  color:var(--b-accent);
+  background:rgba(3,7,18,0.8);
+}
+/* When flipped: front becomes inaccessible, back becomes active */
+body.flipped .page-front{
+  pointer-events:none;
+}
+body.flipped .page-back{
+  pointer-events:all;
+}
+
+/* Flip overlay — dramatic flash during transition */
+.flip-overlay{
+  position:fixed;inset:0;z-index:9998;
+  pointer-events:none;
+  opacity:0;
+}
+.flip-overlay.side-a-flash{
+  background:radial-gradient(ellipse at center,rgba(232,168,56,0.3),transparent 70%);
+}
+.flip-overlay.side-b-flash{
+  background:radial-gradient(ellipse at center,rgba(56,189,248,0.3),transparent 70%);
+}
+
+/* Shadow that sweeps across during flip */
+.flip-shadow{
+  position:fixed;top:0;bottom:0;width:100%;z-index:9997;
+  pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(0,0,0,0.6),transparent);
+  transform:translateX(-100%);
+}
+
+/* Particle burst during flip */
+.flip-particles{
+  position:fixed;inset:0;z-index:9996;
+  pointer-events:none;
+  overflow:hidden;
+}
+.flip-particle{
+  position:absolute;
+  width:4px;height:4px;
+  border-radius:50%;
+  opacity:0;
+}
+.flip-particle.gold{background:var(--a-gold);box-shadow:0 0 8px var(--a-gold)}
+.flip-particle.blue{background:var(--b-accent);box-shadow:0 0 8px var(--b-accent)}
+.flip-particle.white{background:#fff;box-shadow:0 0 6px rgba(255,255,255,0.8)}
 
 /* GRAIN — only side A */
 #side-a::after{
@@ -387,6 +513,16 @@ img{max-width:100%;display:block}
   width:380px;height:220px;
   margin:0 auto 2rem;
   cursor:pointer;
+  /* Pulsing glow to indicate clickability */
+  animation:cardGlow 2.5s ease-in-out infinite;
+}
+@keyframes cardGlow{
+  0%,100%{filter:drop-shadow(0 0 20px rgba(232,168,56,0.15)) drop-shadow(0 0 60px rgba(56,189,248,0.08))}
+  50%{filter:drop-shadow(0 0 35px rgba(232,168,56,0.3)) drop-shadow(0 0 80px rgba(56,189,248,0.15))}
+}
+.pivot-card-wrap:hover{
+  animation:none;
+  filter:drop-shadow(0 0 40px rgba(232,168,56,0.4)) drop-shadow(0 0 100px rgba(56,189,248,0.2));
 }
 .pivot-card-inner{
   width:100%;height:100%;
@@ -642,8 +778,18 @@ footer{
   .b-contact-links{flex-direction:column;align-items:center}
   footer{flex-direction:column;gap:.75rem;text-align:center}
   #mainNav{padding:1rem 1.25rem}
+  .side-indicator{right:12px}
+  .side-dot{width:8px;height:8px}
+  #muteToggle{bottom:12px;right:12px;width:36px;height:36px;font-size:14px}
+  .page-flipper{perspective:1000px}
 }
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .page-face{transform:none!important;backface-visibility:visible!important}
+  .page-back{position:relative!important;transform:none!important;pointer-events:all!important}
+  .page-flipper{perspective:none!important}
+  .pivot-card-wrap{animation:none!important}
+}
 </style>
 </head>
 <body>
@@ -669,9 +815,24 @@ footer{
       <li><a href="#b-stack">Stack</a></li>
       <li><a href="#b-experience">Experience</a></li>
       <a href="#b-contact" class="nav-cta-b">Contact</a>
+      <a href="#" class="nav-cta-b" id="flipBackBtn" style="border-color:var(--a-gold);color:var(--a-gold)">← See the Human</a>
     </ul>
   </div>
 </nav>
+
+<!-- SIDE INDICATOR -->
+<div class="side-indicator" id="sideIndicator">
+  <div class="side-dot active" id="dotA" title="The Human"></div>
+  <div class="side-dot" id="dotB" title="The Architect"></div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE FLIPPER — 3D WRAPPER
+     Front = Side A (Human)
+     Back  = Side B (Architect)
+═══════════════════════════════════════ -->
+<div class="page-flipper" id="pageFlipper">
+<div class="page-face page-front" id="pageFront">
 
 <!-- ──────────────────────────────────────────
      SIDE A — THE HUMAN / STORYTELLER
@@ -853,9 +1014,9 @@ footer{
 </div><!-- /side-a -->
 
 <!-- ──────────────────────────────────────────
-     THE PIVOT — TWO-FACED
+     THE PIVOT — TWO-FACED (FLIP TRIGGER)
 ────────────────────────────────────────────── -->
-<section id="pivot">
+<section id="pivot" class="pivot-trigger">
   <div class="pivot-eyebrow ry">Full disclosure</div>
   <h2 class="pivot-h ry">I'm a two-faced person.</h2>
   <p class="pivot-sub ry">You've met the storyteller. Now meet the architect.</p>
@@ -891,13 +1052,20 @@ footer{
     </div>
   </div>
 
-  <p class="pivot-hint ry">Hover to flip</p>
+  <p class="pivot-hint ry">Click the card to flip the entire page</p>
 
   <a class="pivot-scroll ry" href="#b-hero">
     meet the architect
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
   </a>
 </section>
+
+</div><!-- /page-front -->
+
+<!-- ═══════════════════════════════════════
+     BACK FACE — SIDE B (Architect)
+═══════════════════════════════════════ -->
+<div class="page-face page-back" id="pageBack">
 
 <!-- ──────────────────────────────────────────
      SIDE B — THE ARCHITECT
@@ -1115,6 +1283,18 @@ footer{
 
 </div><!-- /side-b -->
 
+<!-- FLIP BACK TO HUMAN -->
+<section style="padding:5rem 0;text-align:center;background:var(--b-bg);border-top:1px solid var(--b-bord)">
+  <p class="b-section-eyebrow reveal" style="justify-content:center">The other side</p>
+  <h2 class="b-section-title reveal" style="text-align:center">Want to see the storyteller?</h2>
+  <div class="reveal" style="margin-top:2rem">
+    <a href="#" class="b-btn-secondary" id="flipBackBtnBottom">← Flip back to the Human</a>
+  </div>
+</section>
+
+</div><!-- /page-back -->
+</div><!-- /page-flipper -->
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-a">iHack<span>.</span>Audio · Shahnam Jilan · 2026</div>
@@ -1208,10 +1388,221 @@ ScrollTrigger.batch('.pc', {
   start: 'top 78%'
 });
 
-// ── PIVOT CARD — click to lock flip ──
+// ── PIVOT CARD — CLICK TO FLIP THE ENTIRE PAGE ──
+const pageFlipper = document.getElementById('pageFlipper');
+const pageFront = document.getElementById('pageFront');
+const pageBack = document.getElementById('pageBack');
+let isFlipped = false;
+let isFlipping = false;
+
+function spawnFlipParticles(color) {
+  const container = document.createElement('div');
+  container.className = 'flip-particles';
+  document.body.appendChild(container);
+  const count = 24;
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'flip-particle ' + color;
+    const startX = window.innerWidth / 2;
+    const startY = window.innerHeight / 2;
+    p.style.left = startX + 'px';
+    p.style.top = startY + 'px';
+    container.appendChild(p);
+    const angle = (i / count) * Math.PI * 2;
+    const distance = 200 + Math.random() * 400;
+    const size = 2 + Math.random() * 4;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    gsap.to(p, {
+      x: Math.cos(angle) * distance,
+      y: Math.sin(angle) * distance,
+      opacity: 1,
+      duration: 0.15,
+      ease: 'power2.out',
+      delay: Math.random() * 0.1
+    });
+    gsap.to(p, {
+      opacity: 0,
+      duration: 0.6,
+      delay: 0.3 + Math.random() * 0.2,
+      ease: 'power2.in',
+      onComplete: () => p.remove()
+    });
+  }
+  gsap.delayedCall(1.5, () => container.remove());
+  // Text scramble on pivot heading
+  scrambleText(document.querySelector('.pivot-h'), "I'm a two-faced person.");
+}
+
+function scrambleText(el, finalText) {
+  if (!el) return;
+  const chars = '!@#$%^&*()_+{}|:<>?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  let frame = 0;
+  const totalFrames = 20;
+  const interval = setInterval(() => {
+    let result = '';
+    for (let i = 0; i < finalText.length; i++) {
+      if (finalText[i] === ' ') { result += ' '; continue; }
+      if (frame > totalFrames * (i / finalText.length)) {
+        result += finalText[i];
+      } else {
+        result += chars[Math.floor(Math.random() * chars.length)];
+      }
+    }
+    el.textContent = result;
+    frame++;
+    if (frame > totalFrames) {
+      clearInterval(interval);
+      el.textContent = finalText;
+    }
+  }, 40);
+}
+
+const pageFlipper = document.getElementById('pageFlipper');
+const pageFront = document.getElementById('pageFront');
+const pageBack = document.getElementById('pageBack');
+let isFlipped = false;
+let isFlipping = false;
+
 document.getElementById('pivotCard').addEventListener('click', function() {
-  this.classList.toggle('flipped');
+  if (isFlipping) return;
+  isFlipping = true;
+
+  if (!isFlipped) {
+    flipToSideB();
+  } else {
+    flipToSideA();
+  }
 });
+
+function flipToSideB() {
+  initAudio();
+  playFlipSound('forward');
+  spawnFlipParticles('gold');
+  document.body.classList.add('flipping');
+  const tl = gsap.timeline({
+    onComplete: () => {
+      isFlipped = true;
+      isFlipping = false;
+      document.body.classList.remove('flipping');
+      document.body.classList.add('flipped');
+      window.scrollTo(0, 0);
+      updateDots();
+      document.querySelectorAll('#side-b .reveal').forEach(el => {
+        revealObs.observe(el);
+      });
+    }
+  });
+
+  tl.to(pageFront, {
+    scale: 0.95,
+    duration: 0.3,
+    ease: 'power2.in'
+  })
+  .to(pageFront, {
+    rotateY: -180,
+    duration: 1.0,
+    ease: 'power3.inOut',
+    onStart: () => {
+      pageBack.style.pointerEvents = 'all';
+      gsap.set(pageBack, { rotateY: 0 });
+    }
+  }, '-=0.1')
+  .to(pageBack, {
+    rotateY: 0,
+    duration: 1.0,
+    ease: 'power3.inOut'
+  }, '<')
+  .to(pageBack, {
+    scale: 1,
+    duration: 0.3,
+    ease: 'power2.out'
+  }, '-=0.2')
+  .call(() => {
+    nav.classList.add('arch-mode');
+  }, [], 0.5);
+}
+
+function flipToSideA() {
+  initAudio();
+  playFlipSound('backward');
+  spawnFlipParticles('blue');
+  document.body.classList.add('flipping');
+  const tl = gsap.timeline({
+    onComplete: () => {
+      isFlipped = false;
+      isFlipping = false;
+      document.body.classList.remove('flipping');
+      document.body.classList.remove('flipped');
+      gsap.set(pageFront, { rotateY: 0, scale: 1 });
+      gsap.set(pageBack, { rotateY: 180, scale: 1 });
+      pageBack.style.pointerEvents = 'none';
+      nav.classList.remove('arch-mode');
+      window.scrollTo(0, 0);
+      updateDots();
+    }
+  });
+
+  tl.to(pageBack, {
+    scale: 0.95,
+    duration: 0.3,
+    ease: 'power2.in'
+  })
+  .to(pageBack, {
+    rotateY: 180,
+    duration: 1.0,
+    ease: 'power3.inOut'
+  }, '-=0.1')
+  .to(pageFront, {
+    rotateY: 0,
+    duration: 1.0,
+    ease: 'power3.inOut',
+    onStart: () => {
+      pageFront.style.pointerEvents = 'all';
+    }
+  }, '<')
+  .to(pageFront, {
+    scale: 1,
+    duration: 0.3,
+    ease: 'power2.out'
+  }, '-=0.2');
+}
+
+// Wire up nav pill and scroll links to trigger flip
+const archLinks = document.querySelectorAll('a[href="#pivot"], .pivot-scroll');
+archLinks.forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    pivot.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+      if (!isFlipped && !isFlipping) flipToSideB();
+    }, 600);
+  });
+});
+
+// Flip back button in Side B nav
+document.getElementById('flipBackBtn').addEventListener('click', function(e) {
+  e.preventDefault();
+  if (isFlipped && !isFlipping) flipToSideA();
+});
+// Flip back button at bottom of Side B
+document.getElementById('flipBackBtnBottom').addEventListener('click', function(e) {
+  e.preventDefault();
+  if (isFlipped && !isFlipping) flipToSideA();
+});
+
+// Side indicator dots — click to flip
+document.getElementById('dotA').addEventListener('click', function() {
+  if (isFlipped && !isFlipping) flipToSideA();
+});
+document.getElementById('dotB').addEventListener('click', function() {
+  if (!isFlipped && !isFlipping) flipToSideB();
+});
+// Update dots during flip
+function updateDots() {
+  document.getElementById('dotA').classList.toggle('active', !isFlipped);
+  document.getElementById('dotB').classList.toggle('active', isFlipped);
+}
 
 // ── SIDE B REVEALS (IntersectionObserver) ──
 const revealObs = new IntersectionObserver((entries) => {
@@ -1243,7 +1634,64 @@ const numObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 document.querySelectorAll('.b-number-val[data-target]').forEach(el => numObs.observe(el));
 
-// ── MAGNETIC BUTTONS ──
+// ── AUDIO — Synthesized flip whoosh + mute toggle ──
+let audioCtx = null;
+let isMuted = false;
+
+function initAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+function playFlipSound(direction) {
+  if (isMuted || !audioCtx) return;
+  const now = audioCtx.currentTime;
+  // White noise whoosh
+  const bufferSize = audioCtx.sampleRate * 0.4;
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1);
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = buffer;
+  // Bandpass filter sweep
+  const filter = audioCtx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.setValueAtTime(direction === 'forward' ? 800 : 400, now);
+  filter.frequency.exponentialRampToValueAtTime(direction === 'forward' ? 2000 : 1200, now + 0.15);
+  filter.frequency.exponentialRampToValueAtTime(200, now + 0.35);
+  filter.Q.value = 1.5;
+  // Gain envelope
+  const gain = audioCtx.createGain();
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(0.15, now + 0.05);
+  gain.gain.linearRampToValueAtTime(0.08, now + 0.2);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+  noise.connect(filter).connect(gain).connect(audioCtx.destination);
+  noise.start(now);
+  noise.stop(now + 0.4);
+  // Subtle thud at end
+  const osc = audioCtx.createOscillator();
+  const thudGain = audioCtx.createGain();
+  osc.frequency.value = 80;
+  osc.type = 'sine';
+  thudGain.gain.setValueAtTime(0, now + 0.25);
+  thudGain.gain.linearRampToValueAtTime(0.08, now + 0.28);
+  thudGain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+  osc.connect(thudGain).connect(audioCtx.destination);
+  osc.start(now + 0.25);
+  osc.stop(now + 0.45);
+}
+
+// Mute toggle button
+const muteBtn = document.createElement('button');
+muteBtn.id = 'muteToggle';
+muteBtn.innerHTML = '🔊';
+muteBtn.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:1001;width:44px;height:44px;border-radius:50%;border:1px solid var(--a-bord);background:rgba(8,6,4,0.8);color:var(--a-gold);font-size:18px;cursor:pointer;backdrop-filter:blur(8px);transition:all 0.3s;display:flex;align-items:center;justify-content:center';
+document.body.appendChild(muteBtn);
+muteBtn.addEventListener('click', function() {
+  isMuted = !isMuted;
+  this.innerHTML = isMuted ? '🔇' : '🔊';
+  this.style.borderColor = isMuted ? 'var(--a-red)' : 'var(--a-bord)';
+});
 document.querySelectorAll('.magnetic').forEach(btn => {
   btn.addEventListener('mousemove', e => {
     const r = btn.getBoundingClientRect();
