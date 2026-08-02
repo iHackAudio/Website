@@ -121,6 +121,7 @@ body.flipping .page-front::after{
   overflow-x:hidden;
   transform:rotateY(180deg);
   pointer-events:none;
+  will-change:transform;
 }
 /* Side indicator dots */
 .side-indicator{
@@ -1312,6 +1313,12 @@ footer{
 <script>
 gsap.registerPlugin(ScrollTrigger);
 
+// ── REDUCED MOTION DETECTION ──
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ── GSAP CONTEXT — automatic cleanup for all animations ──
+let ctx;
+
 // ── NAV SCROLL + MODE SWITCH ──
 const nav = document.getElementById('mainNav');
 const pivot = document.getElementById('pivot');
@@ -1322,6 +1329,9 @@ window.addEventListener('scroll', () => {
   const pivotBottom = pivot.getBoundingClientRect().bottom;
   nav.classList.toggle('arch-mode', pivotBottom < 0);
 }, { passive: true });
+
+// ── GSAP MATCHMEDIA — responsive animation scoping ──
+let mm = gsap.matchMedia();
 
 // ── START PROMPT / HERO ──
 function startHero() {
@@ -1354,38 +1364,50 @@ startPrompt.addEventListener('click', () => {
   });
 }, { once: true });
 
-// ── SIDE A SCROLL REVEALS (GSAP) ──
-gsap.utils.toArray('.ry').forEach(el => {
-  gsap.to(el, {
-    opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
-    scrollTrigger: { trigger: el, start: 'top 82%' }
+// ── MATCHMEDIA: DESKTOP-ONLY SCROLL ANIMATIONS ──
+mm.add('(min-width: 800px)', () => {
+  // Side A scroll reveals
+  gsap.utils.toArray('.ry').forEach(el => {
+    gsap.to(el, {
+      opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 82%' }
+    });
   });
-});
-gsap.utils.toArray('.rx').forEach(el => {
-  gsap.to(el, {
-    opacity: 1, x: 0, duration: 0.7, ease: 'power2.out',
-    scrollTrigger: { trigger: el, start: 'top 82%' }
+  gsap.utils.toArray('.rx').forEach(el => {
+    gsap.to(el, {
+      opacity: 1, x: 0, duration: 0.7, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 82%' }
+    });
   });
-});
-gsap.utils.toArray('.rx-r').forEach(el => {
-  gsap.to(el, {
-    opacity: 1, x: 0, duration: 0.7, ease: 'power2.out',
-    scrollTrigger: { trigger: el, start: 'top 82%' }
+  gsap.utils.toArray('.rx-r').forEach(el => {
+    gsap.to(el, {
+      opacity: 1, x: 0, duration: 0.7, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 82%' }
+    });
+  });
+
+  // Staggered reveals
+  ScrollTrigger.batch('.s-card', {
+    onEnter: b => gsap.to(b, { opacity: 1, scale: 1, stagger: 0.16, duration: 0.7, ease: 'back.out(1.3)' }),
+    start: 'top 78%'
+  });
+  ScrollTrigger.batch('.pill', {
+    onEnter: b => gsap.to(b, { opacity: 1, x: 0, stagger: 0.08, duration: 0.5, ease: 'power2.out' }),
+    start: 'top 85%'
+  });
+  ScrollTrigger.batch('.pc', {
+    onEnter: b => gsap.to(b, { opacity: 1, y: 0, stagger: 0.2, duration: 0.65, ease: 'power2.out' }),
+    start: 'top 78%'
   });
 });
 
-// Staggered
-ScrollTrigger.batch('.s-card', {
-  onEnter: b => gsap.to(b, { opacity: 1, scale: 1, stagger: 0.16, duration: 0.7, ease: 'back.out(1.3)' }),
-  start: 'top 78%'
-});
-ScrollTrigger.batch('.pill', {
-  onEnter: b => gsap.to(b, { opacity: 1, x: 0, stagger: 0.08, duration: 0.5, ease: 'power2.out' }),
-  start: 'top 85%'
-});
-ScrollTrigger.batch('.pc', {
-  onEnter: b => gsap.to(b, { opacity: 1, y: 0, stagger: 0.2, duration: 0.65, ease: 'power2.out' }),
-  start: 'top 78%'
+// ── MATCHMEDIA: MOBILE — instant reveals, no scroll animations ──
+mm.add('(max-width: 799px)', () => {
+  // On mobile, just show everything immediately
+  gsap.set('.ry, .rx, .rx-r', { opacity: 1, x: 0, y: 0 });
+  gsap.set('.s-card', { opacity: 1, scale: 1 });
+  gsap.set('.pill', { opacity: 1, x: 0 });
+  gsap.set('.pc', { opacity: 1, y: 0 });
 });
 
 // ── PIVOT CARD — CLICK TO FLIP THE ENTIRE PAGE ──
@@ -1458,12 +1480,6 @@ function scrambleText(el, finalText) {
   }, 40);
 }
 
-const pageFlipper = document.getElementById('pageFlipper');
-const pageFront = document.getElementById('pageFront');
-const pageBack = document.getElementById('pageBack');
-let isFlipped = false;
-let isFlipping = false;
-
 document.getElementById('pivotCard').addEventListener('click', function() {
   if (isFlipping) return;
   isFlipping = true;
@@ -1480,6 +1496,23 @@ function flipToSideB() {
   playFlipSound('forward');
   spawnFlipParticles('gold');
   document.body.classList.add('flipping');
+
+  // Reduced motion: instant switch, no animation
+  if (prefersReducedMotion) {
+    gsap.set(pageFront, { rotateY: -180, scale: 0.95 });
+    gsap.set(pageBack, { rotateY: 0, scale: 1 });
+    pageBack.style.pointerEvents = 'all';
+    isFlipped = true;
+    isFlipping = false;
+    document.body.classList.remove('flipping');
+    document.body.classList.add('flipped');
+    nav.classList.add('arch-mode');
+    window.scrollTo(0, 0);
+    updateDots();
+    document.querySelectorAll('#side-b .reveal').forEach(el => revealObs.observe(el));
+    return;
+  }
+
   const tl = gsap.timeline({
     onComplete: () => {
       isFlipped = true;
@@ -1497,12 +1530,14 @@ function flipToSideB() {
   tl.to(pageFront, {
     scale: 0.95,
     duration: 0.3,
-    ease: 'power2.in'
+    ease: 'power2.in',
+    force3D: true
   })
   .to(pageFront, {
     rotateY: -180,
     duration: 1.0,
     ease: 'power3.inOut',
+    force3D: true,
     onStart: () => {
       pageBack.style.pointerEvents = 'all';
       gsap.set(pageBack, { rotateY: 0 });
@@ -1511,12 +1546,14 @@ function flipToSideB() {
   .to(pageBack, {
     rotateY: 0,
     duration: 1.0,
-    ease: 'power3.inOut'
+    ease: 'power3.inOut',
+    force3D: true
   }, '<')
   .to(pageBack, {
     scale: 1,
     duration: 0.3,
-    ease: 'power2.out'
+    ease: 'power2.out',
+    force3D: true
   }, '-=0.2')
   .call(() => {
     nav.classList.add('arch-mode');
@@ -1528,6 +1565,23 @@ function flipToSideA() {
   playFlipSound('backward');
   spawnFlipParticles('blue');
   document.body.classList.add('flipping');
+
+  // Reduced motion: instant switch
+  if (prefersReducedMotion) {
+    gsap.set(pageBack, { rotateY: 180, scale: 1 });
+    gsap.set(pageFront, { rotateY: 0, scale: 1 });
+    pageBack.style.pointerEvents = 'none';
+    pageFront.style.pointerEvents = 'all';
+    isFlipped = false;
+    isFlipping = false;
+    document.body.classList.remove('flipping');
+    document.body.classList.remove('flipped');
+    nav.classList.remove('arch-mode');
+    window.scrollTo(0, 0);
+    updateDots();
+    return;
+  }
+
   const tl = gsap.timeline({
     onComplete: () => {
       isFlipped = false;
@@ -1546,17 +1600,20 @@ function flipToSideA() {
   tl.to(pageBack, {
     scale: 0.95,
     duration: 0.3,
-    ease: 'power2.in'
+    ease: 'power2.in',
+    force3D: true
   })
   .to(pageBack, {
     rotateY: 180,
     duration: 1.0,
-    ease: 'power3.inOut'
+    ease: 'power3.inOut',
+    force3D: true
   }, '-=0.1')
   .to(pageFront, {
     rotateY: 0,
     duration: 1.0,
     ease: 'power3.inOut',
+    force3D: true,
     onStart: () => {
       pageFront.style.pointerEvents = 'all';
     }
@@ -1564,7 +1621,8 @@ function flipToSideA() {
   .to(pageFront, {
     scale: 1,
     duration: 0.3,
-    ease: 'power2.out'
+    ease: 'power2.out',
+    force3D: true
   }, '-=0.2');
 }
 
@@ -1726,6 +1784,11 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     const t = document.querySelector(a.getAttribute('href'));
     if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
   });
+});
+
+// ── CLEANUP: revert all matchMedia animations on page unload ──
+window.addEventListener('beforeunload', () => {
+  mm.revert();
 });
 </script>
 

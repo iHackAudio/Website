@@ -26,8 +26,8 @@
 - [x] Mute/unmute toggle button
 - [x] Side indicator dots (clickable)
 - [x] Text scramble effect on pivot heading during flip
-- [ ] Mobile-responsive flip animation
-- [ ] Performance optimization (GPU layers, will-change)
+- [x] Mobile-responsive flip animation (gsap.matchMedia — mobile gets instant reveals, no scroll animations)
+- [x] Performance optimization (force3D on flip tweens, will-change on page-back, gsap.context, gsap.matchMedia, reduced-motion JS handling)
 - [ ] Custom cursor effects (optional)
 
 ## Phase 4: Integration & Testing
@@ -49,7 +49,7 @@
 - Research Agent 1: Top portfolio websites 2026 ✅
 - Research Agent 2: Page-flip animation techniques ✅
 - Research Agent 3: Dual-identity/split-personality design patterns ✅
-- Research Agent 4: GSAP advanced animation patterns ✅ (re-run needed — went off-track)
+- Research Agent 4: GSAP advanced animation patterns ✅ (re-run complete)
 - Research Agent 5: Micro-interactions & scroll-driven animations ✅
 - Research Agent 6: 3D CSS transforms & perspective tricks ✅
 - Research Agent 7: Audio-visual integration patterns ✅
