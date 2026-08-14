@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iHack Audio — Publishing OS</title>
+  <meta name="description" content="From blank page to distribution-ready audio drama. iHack Audio is the world's first vertically integrated AI publishing stack.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════════ */
+:root {
+  --void:     #07070d;
+  --surface:  #0f0f1a;
+  --card:     #13131f;
+  --border:   #1e1e30;
+  --gold:     #e8c97a;
+  --gold-dim: #a8893a;
+  --violet:   #a259ff;
+  --violet-dim:#5a2ea0;
+  --green:    #3dd68c;
+  --red:      #ff4d4d;
+  --text:     #f0ece4;
+  --muted:    #7a7a9a;
+  --mono:     'Space Mono', monospace;
+  --serif:    'Playfair Display', Georgia, serif;
+  --sans:     'DM Sans', system-ui, sans-serif;
+}
+
+/* ═══════════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  cursor: default;
+}
+::selection { background: var(--gold); color: var(--void); }
+
+/* ═══════════════════════════════════════════════
+   GRAIN OVERLAY
+═══════════════════════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.35;
+}
+
+/* ═══════════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════════ */
+#mainNav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 3rem;
+  background: rgba(7,7,13,0.7);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(232,201,122,0.08);
+  transition: all 0.4s ease;
+}
+#mainNav.scrolled {
+  padding: 0.8rem 3rem;
+  background: rgba(7,7,13,0.95);
+  border-bottom-color: rgba(232,201,122,0.15);
+}
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 1rem;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+}
+.nav-logo .dot { color: var(--gold); }
+.nav-r { display: flex; align-items: center; gap: 2rem; }
+.nav-link {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-link:hover { color: var(--text); }
+.nav-machine {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--gold);
+  text-decoration: none;
+  border: 1px solid rgba(232,201,122,0.3);
+  padding: 0.4rem 1rem;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+}
+.nav-machine:hover {
+  background: var(--gold);
+  color: var(--void);
+}
+
+/* ═══════════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════════ */
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+.wrap-sm { max-width: 720px; margin: 0 auto; padding: 0 2rem; }
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  opacity: 0;
+}
+.serif-i { font-family: var(--serif); font-style: italic; font-weight: 400; }
+.gt { color: var(--gold); }
+.gv { color: var(--violet); }
+section { padding: 7rem 0; }
+
+/* ═══════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.8rem;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+.btn-gold {
+  background: var(--gold);
+  color: var(--void);
+}
+.btn-gold:hover { background: #f0d890; transform: translateY(-1px); }
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid rgba(240,236,228,0.25);
+}
+.btn-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.btn-violet {
+  background: var(--violet);
+  color: #fff;
+}
+.btn-violet:hover { background: #b570ff; transform: translateY(-1px); }
+
+/* ═══════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Ambient orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  opacity: 0;
+  animation: orbPulse 8s ease-in-out infinite;
+}
+.orb-a {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(162,89,255,0.12) 0%, transparent 70%);
+  top: -200px; right: -100px;
+  animation-delay: 0s;
+}
+.orb-b {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(232,201,122,0.08) 0%, transparent 70%);
+  bottom: -100px; left: -150px;
+  animation-delay: 3s;
+}
+.orb-c {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(61,214,140,0.06) 0%, transparent 70%);
+  top: 40%; left: 50%;
+  animation-delay: 5s;
+}
+@keyframes orbPulse {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.1) translateY(-20px); }
+}
+
+/* Scanline */
+.hero-scanline {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,201,122,0.4), transparent);
+  top: -2px;
+  animation: scanDown 6s linear infinite;
+  pointer-events: none;
+}
+@keyframes scanDown {
+  0% { top: -2px; opacity: 1; }
+  90% { opacity: 0.3; }
+  100% { top: 100vh; opacity: 0; }
+}
+
+/* Dossier stream top-right */
+.hero-dossier {
+  position: absolute;
+  top: 140px;
+  right: 3rem;
+  width: 280px;
+  opacity: 0;
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: rgba(232,201,122,0.35);
+  line-height: 1.8;
+  pointer-events: none;
+}
+.hero-dossier .d-line { overflow: hidden; white-space: nowrap; }
+.hero-dossier .d-val { color: rgba(232,201,122,0.7); }
+
+#hero .wrap {
+  position: relative;
+  z-index: 2;
+  padding-top: 7rem;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.9rem;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+}
+.badge-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.h-lines { overflow: hidden; }
+.h-line {
+  font-family: var(--serif);
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.1em;
+  overflow: hidden;
+}
+.h-line-inner { display: block; transform: translateY(110%); }
+.h-line .hw-i { font-style: italic; color: var(--gold); }
+.h-line .hw-muted { color: var(--muted); font-weight: 300; }
+.h-line .h-brand { color: var(--text); }
+.h-line .h-voice { color: var(--gold-dim); font-family: var(--sans); font-size: 0.45em; font-weight: 300; letter-spacing: 0.1em; margin-left: 0.4em; vertical-align: middle; }
+
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--muted);
+  margin: 2rem 0 2.5rem;
+  max-width: 520px;
+  line-height: 1.7;
+  opacity: 0;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  opacity: 0;
+}
+
+/* Score ring bottom-left */
+.hero-score {
+  position: absolute;
+  bottom: 3rem;
+  left: 3rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  opacity: 0;
+}
+.score-ring {
+  position: relative;
+  width: 64px; height: 64px;
+}
+.score-ring svg { transform: rotate(-90deg); }
+.score-ring-track { fill: none; stroke: rgba(232,201,122,0.1); stroke-width: 3; }
+.score-ring-fill {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 163;
+  stroke-dashoffset: 163;
+  transition: stroke-dashoffset 2s cubic-bezier(0.4,0,0.2,1);
+}
+.score-num {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--gold);
+  font-weight: 700;
+}
+.score-meta { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); line-height: 1.8; }
+.score-meta span { display: block; }
+.score-meta .sm-val { color: var(--gold); }
+
+/* Scroll cue */
+.scroll-cue {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  opacity: 0;
+  pointer-events: none;
+}
+.scroll-cue span {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  animation: scrollDrop 2s ease-in-out infinite;
+}
+@keyframes scrollDrop {
+  0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+  50% { transform: scaleY(1); transform-origin: top; }
+  51% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION: PROBLEM
+═══════════════════════════════════════════════ */
+#problem { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.prob-h {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+}
+.prob-sub {
+  color: var(--muted);
+  max-width: 600px;
+  font-size: 1rem;
+  line-height: 1.75;
+  margin-bottom: 3.5rem;
+  opacity: 0;
+}
+
+.chain-wrap {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0;
+  align-items: start;
+}
+.ch-col {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 2rem;
+  opacity: 0;
+}
+.ch-col.ch-bad { border-color: rgba(255,77,77,0.2); }
+.ch-col.ch-good { border-color: rgba(61,214,140,0.2); }
+
+.ch-tag {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+}
+.bad-t { background: rgba(255,77,77,0.1); color: #ff4d4d; border: 1px solid rgba(255,77,77,0.25); }
+.good-t { background: rgba(61,214,140,0.1); color: var(--green); border: 1px solid rgba(61,214,140,0.25); }
+
+.ch-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.ch-ic {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.ic-x { background: rgba(255,77,77,0.15); color: #ff4d4d; }
+.ic-v { background: rgba(61,214,140,0.15); color: var(--green); }
+
+.ch-result {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  border-top: 1px solid var(--border);
+}
+.res-bad { color: #ff4d4d; border-top-color: rgba(255,77,77,0.2); }
+.res-good { color: var(--green); border-top-color: rgba(61,214,140,0.2); }
+
+.vs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--void);
+  writing-mode: vertical-rl;
+  padding: 1rem 0;
+  opacity: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION: THE STACK (replaces "how it works")
+═══════════════════════════════════════════════ */
+#stack { position: relative; overflow: hidden; }
+
+.stack-h {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  opacity: 0;
+}
+.stack-sub {
+  color: var(--muted);
+  font-size: 1rem;
+  max-width: 560px;
+  margin-bottom: 4rem;
+  opacity: 0;
+}
+
+.pipeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+.pipeline::before {
+  content: '';
+  position: absolute;
+  left: 28px;
+  top: 28px;
+  bottom: 28px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--gold-dim), var(--violet-dim), var(--green), transparent);
+  opacity: 0.4;
+}
+
+.p-layer {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 0 1.5rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--border);
+  opacity: 0;
+  transform: translateX(-20px);
+}
+.p-layer:last-child { border-bottom: none; }
+
+.p-node {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.p-node.gold { border-color: rgba(232,201,122,0.4); background: rgba(232,201,122,0.05); }
+.p-node.violet { border-color: rgba(162,89,255,0.4); background: rgba(162,89,255,0.05); }
+.p-node.green { border-color: rgba(61,214,140,0.4); background: rgba(61,214,140,0.05); }
+.p-node.blue { border-color: rgba(99,179,237,0.4); background: rgba(99,179,237,0.05); }
+.p-node.red { border-color: rgba(255,77,77,0.4); background: rgba(255,77,77,0.05); }
+
+.p-content { padding-top: 0.5rem; }
+.p-label {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+.p-title {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+.p-desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 600px;
+  margin-bottom: 0.8rem;
+}
+.p-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.p-tag {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION: LIVE OUTPUT (productions)
+═══════════════════════════════════════════════ */
+#output { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+.output-h {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+  opacity: 0;
+}
+.output-sub {
+  color: var(--muted);
+  font-size: 1rem;
+  max-width: 520px;
+  margin-bottom: 3.5rem;
+  opacity: 0;
+}
+
+.productions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.prod-card {
+  background: var(--card);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  cursor: default;
+  transition: background 0.3s;
+}
+.prod-card:hover { background: #161625; }
+.prod-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.prod-card.g::before { background: linear-gradient(90deg, var(--gold), transparent); }
+.prod-card.v::before { background: linear-gradient(90deg, var(--violet), transparent); }
+.prod-card.gr::before { background: linear-gradient(90deg, var(--green), transparent); }
+
+.prod-score {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.prod-score-val {
+  color: var(--gold);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.prod-title {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+.prod-ep {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+.prod-desc {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 1.2rem;
+}
+.prod-tags { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+.prod-tag {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.prod-tag.gold { border-color: rgba(232,201,122,0.3); color: var(--gold-dim); }
+.prod-tag.violet { border-color: rgba(162,89,255,0.3); color: var(--violet); }
+.prod-tag.green { border-color: rgba(61,214,140,0.3); color: var(--green); }
+
+/* ═══════════════════════════════════════════════
+   SECTION: FLIP CARD (identity)
+═══════════════════════════════════════════════ */
+#identity {
+  text-align: center;
+  padding: 7rem 0;
+}
+.flip-eye {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1rem;
+  opacity: 0;
+}
+.flip-h {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+  opacity: 0;
+}
+.flip-body {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-bottom: 3.5rem;
+  opacity: 0;
+}
+
+.card-scene {
+  perspective: 1200px;
+  width: 340px;
+  height: 420px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+.card-inner {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-scene:hover .card-inner { transform: rotateY(180deg); }
+.card-f, .card-b {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2.5rem;
+}
+.card-f {
+  background: linear-gradient(135deg, #13131f, #0f0f1a);
+  border-color: rgba(232,201,122,0.2);
+}
+.card-b {
+  background: linear-gradient(135deg, #0f0f1a, #0a0814);
+  border-color: rgba(162,89,255,0.2);
+  transform: rotateY(180deg);
+}
+.face-ico { font-size: 2.5rem; filter: grayscale(0.3); }
+.face-lbl {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.face-sub {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.face-detail {
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.65;
+  max-width: 260px;
+}
+.face-cta {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--violet);
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION: TRACTION (bento)
+═══════════════════════════════════════════════ */
+#traction { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+.tract-h {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+  opacity: 0;
+}
+.tract-sub {
+  color: var(--muted);
+  font-size: 1rem;
+  max-width: 500px;
+  margin-bottom: 3.5rem;
+  opacity: 0;
+}
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: auto auto;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.bb {
+  background: var(--card);
+  padding: 2rem;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: background 0.3s;
+}
+.bb:hover { background: #161625; }
+
+.bb-hero { grid-column: span 7; }
+.bb-sm1 { grid-column: span 5; }
+.bb-sm2 { grid-column: span 4; }
+.bb-sm3 { grid-column: span 4; }
+.bb-sm4 { grid-column: span 4; }
+
+.b-ico { font-size: 1.5rem; display: block; margin-bottom: 0.75rem; }
+.b-stat {
+  font-family: var(--mono);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+.b-stat-sm {
+  font-family: var(--mono);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--violet);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+.b-ttl {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+}
+.b-dsc {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.b-badge {
+  display: inline-block;
+  margin-top: 1rem;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid rgba(232,201,122,0.3);
+  color: var(--gold-dim);
+}
+
+/* Bar meters inside bento */
+.b-bars { margin-top: 1rem; }
+.b-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.b-bar-label {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-transform: uppercase;
+  width: 80px;
+  flex-shrink: 0;
+}
+.b-bar-track {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.b-bar-fill {
+  position: absolute;
+  top: 0; left: 0; height: 100%;
+  background: var(--gold);
+  width: 0;
+  transition: width 1.5s cubic-bezier(0.4,0,0.2,1);
+}
+.b-bar-fill.violet { background: var(--violet); }
+.b-bar-fill.green { background: var(--green); }
+.b-bar-val {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--gold);
+  width: 30px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION: PRICING
+═══════════════════════════════════════════════ */
+#pricing { }
+.pr-h {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+  opacity: 0;
+}
+.pr-sub {
+  color: var(--muted);
+  font-size: 1rem;
+  max-width: 500px;
+  margin-bottom: 3.5rem;
+  opacity: 0;
+}
+
+.pr-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.pc {
+  background: var(--card);
+  padding: 2.5rem;
+  opacity: 0;
+}
+.pc.hot {
+  background: linear-gradient(160deg, #141420, #0f0f1a);
+  position: relative;
+}
+.pc.hot::before {
+  content: 'MOST POPULAR';
+  position: absolute;
+  top: 1.5rem; right: 1.5rem;
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  border: 1px solid rgba(232,201,122,0.3);
+  padding: 0.2rem 0.5rem;
+}
+
+.pc-eye {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+.pc-name {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+.pc-amt {
+  font-family: var(--mono);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 0.3rem;
+  line-height: 1;
+}
+.pc-amt sub {
+  font-size: 0.9rem;
+  color: var(--muted);
+  font-weight: 400;
+  vertical-align: baseline;
+}
+.pc-note {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.5rem;
+}
+.pc-list {
+  list-style: none;
+  margin-bottom: 2rem;
+}
+.pc-list li {
+  font-size: 0.85rem;
+  color: var(--muted);
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(30,30,48,0.5);
+  padding-left: 1.2rem;
+  position: relative;
+  line-height: 1.5;
+}
+.pc-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--gold-dim);
+  font-size: 0.7rem;
+}
+
+/* ═══════════════════════════════════════════════
+   SECTION: CONTACT
+═══════════════════════════════════════════════ */
+#contact { background: var(--surface); border-top: 1px solid var(--border); }
+.ct-h {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 0.75rem;
+  opacity: 0;
+}
+.ct-sub {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-bottom: 3rem;
+  opacity: 0;
+}
+
+.form { display: flex; flex-direction: column; gap: 1.2rem; opacity: 0; }
+.f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.f-g { display: flex; flex-direction: column; gap: 0.4rem; }
+.f-lbl {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.f-in, .f-sel, .f-ta {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  padding: 0.85rem 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+.f-in:focus, .f-sel:focus, .f-ta:focus {
+  border-color: rgba(232,201,122,0.4);
+}
+.f-sel { cursor: pointer; }
+.f-ta { min-height: 140px; resize: vertical; }
+.f-in::placeholder, .f-ta::placeholder { color: var(--muted); opacity: 0.6; }
+
+#ok {
+  display: none;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  padding: 1rem;
+  border: 1px solid rgba(61,214,140,0.2);
+  background: rgba(61,214,140,0.05);
+  margin-top: 1rem;
+}
+
+/* ═══════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════ */
+footer {
+  padding: 3rem 3rem 2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.fl { display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; }
+.fl a {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.fl a:hover { color: var(--gold); }
+.fc {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  line-height: 1.8;
+  text-align: right;
+}
+.fc em { color: rgba(232,201,122,0.4); font-style: normal; }
+
+/* ═══════════════════════════════════════════════
+   CURSOR DOT
+═══════════════════════════════════════════════ */
+.cursor-dot {
+  width: 6px; height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+  transition: transform 0.1s ease;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  width: 32px; height: 32px;
+  border: 1px solid rgba(232,201,122,0.4);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: all 0.12s ease;
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+@media (max-width: 900px) {
+  #mainNav { padding: 1rem 1.5rem; }
+  .nav-r { gap: 1rem; }
+  .nav-link { display: none; }
+  .chain-wrap { grid-template-columns: 1fr; }
+  .vs { writing-mode: horizontal-tb; width: 100%; height: 40px; border: none; border-left: none; border-right: none; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .bento { grid-template-columns: 1fr; }
+  .bb-hero, .bb-sm1, .bb-sm2, .bb-sm3, .bb-sm4 { grid-column: span 1; }
+  .pr-grid { grid-template-columns: 1fr; }
+  .f-row { grid-template-columns: 1fr; }
+  .hero-dossier { display: none; }
+  .hero-score { display: none; }
+  footer { flex-direction: column; align-items: flex-start; }
+  .fc { text-align: left; }
+  .pipeline::before { left: 27px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#hero" class="nav-logo">iHack<span class="dot">.</span>Audio</a>
+  <div class="nav-r">
+    <a href="#stack" class="nav-link">The Stack</a>
+    <a href="#output" class="nav-link">Productions</a>
+    <a href="#pricing" class="nav-link">Pricing</a>
+    <a href="#contact" class="nav-link">Contact</a>
+    <a href="https://ihackaudio.github.io/Website/" class="nav-machine" target="_blank">See the machine →</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     C1: HERO
+═══════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-scanline"></div>
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+  <div class="orb orb-c"></div>
+
+  <!-- Dossier stream -->
+  <div class="hero-dossier" id="heroDossier">
+    <div class="d-line">SYSTEM .............. <span class="d-val">ONLINE</span></div>
+    <div class="d-line">PIPELINE ............ <span class="d-val">5-LAYER</span></div>
+    <div class="d-line">SCRIPT ENGINE ....... <span class="d-val">ACTIVE</span></div>
+    <div class="d-line">PRODUCTION SCORE .... <span class="d-val">9.5/10</span></div>
+    <div class="d-line">TITLES PUBLISHED .... <span class="d-val">08</span></div>
+    <div class="d-line">REVENUE ............. <span class="d-val">$5K+</span></div>
+    <div class="d-line">INFRA COST .......... <span class="d-val">$0</span></div>
+    <div class="d-line">APPLE PODCASTS ...... <span class="d-val">#1 AI AUDIO</span></div>
+    <div class="d-line">STATUS .............. <span class="d-val">TAKING ORDERS</span></div>
+  </div>
+
+  <div class="wrap">
+    <div class="hero-badge" id="hBadge">
+      <span class="badge-dot"></span>
+      For Authors &amp; Podcasters — Publishing OS
+    </div>
+
+    <div class="h-lines" id="hLines">
+      <div class="h-line">
+        <span class="h-line-inner">Your story</span>
+      </div>
+      <div class="h-line">
+        <span class="h-line-inner hw-i serif-i">deserves a voice</span>
+      </div>
+      <div class="h-line">
+        <span class="h-line-inner hw-muted">that sounds like a <span style="color:var(--gold);font-style:italic">human wrote it.</span></span>
+      </div>
+    </div>
+
+    <p class="hero-sub" id="hSub">
+      iHack Audio is the world's first vertically integrated AI publishing stack —
+      from blank page to cinematic, distribution-ready audio drama.
+      No studio. No invoice. No compromise.
+    </p>
+
+    <div class="hero-btns" id="hBtns">
+      <a href="#contact" class="btn btn-gold">Tell me your story →</a>
+      <a href="#stack" class="btn btn-outline">See the machine</a>
+    </div>
+  </div>
+
+  <!-- Score ring -->
+  <div class="hero-score" id="heroScore">
+    <div class="score-ring">
+      <svg width="64" height="64" viewBox="0 0 64 64">
+        <circle class="score-ring-track" cx="32" cy="32" r="26"/>
+        <circle class="score-ring-fill" id="scoreRingFill" cx="32" cy="32" r="26"/>
+      </svg>
+      <div class="score-num">9.5</div>
+    </div>
+    <div class="score-meta">
+      <span>PRODUCTION QUALITY</span>
+      <span class="sm-val">iHack Audio Standard</span>
+      <span>Forensic Audit — Verified</span>
+    </div>
+  </div>
+
+  <div class="scroll-cue" id="scrollCue">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     C2: THE PROBLEM
+═══════════════════════════════════════════════ -->
+<section id="problem">
+  <div class="wrap">
+    <div class="eyebrow ry">The real problem</div>
+    <h2 class="prob-h ry">
+      Anyone can generate audio.<br>
+      <span class="serif-i gt">Almost nobody writes for the engine.</span>
+    </h2>
+    <p class="prob-sub ry">
+      The bottleneck isn't the AI. It's what you're feeding it.
+      Every book, every script, every story — written for human eyes.
+      The TTS engine reads it exactly that way.
+      Flatly. Correctly. Robotically.
+    </p>
+
+    <div class="chain-wrap">
+      <div class="ch-col ch-bad rx">
+        <div class="ch-tag bad-t">What everyone else does</div>
+        <div class="ch-row"><div class="ch-ic ic-x">✕</div><span>Write the script for a human reader — normal prose, normal structure</span></div>
+        <div class="ch-row"><div class="ch-ic ic-x">✕</div><span>Feed it directly to any TTS engine without modification</span></div>
+        <div class="ch-row"><div class="ch-ic ic-x">✕</div><span>Engine reads the words. Flatly. Correctly. No soul, no performance.</span></div>
+        <div class="ch-row"><div class="ch-ic ic-x">✕</div><span>Spend hours manually assembling 400 individual character files in Audacity</span></div>
+        <div class="ch-result res-bad">→ Sounds like GPS directions. Every single time.</div>
+      </div>
+
+      <div class="vs ry">VS</div>
+
+      <div class="ch-col ch-good rx">
+        <div class="ch-tag good-t">iHack Audio</div>
+        <div class="ch-row"><div class="ch-ic ic-v">✓</div><span>Script engineered in TTS language — kinetic notation, not human prose</span></div>
+        <div class="ch-row"><div class="ch-ic ic-v">✓</div><span>Engine receives physical performance instructions, not just words</span></div>
+        <div class="ch-row"><div class="ch-ic ic-v">✓</div><span>Multi-agent tournament selects the best creative output — not first draft</span></div>
+        <div class="ch-row"><div class="ch-ic ic-v">✓</div><span>Dialogue Assembly Engine sequences character audio automatically</span></div>
+        <div class="ch-result res-good">→ Sounds human. That's the whole secret.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     C3: THE STACK
+═══════════════════════════════════════════════ -->
+<section id="stack">
+  <div class="wrap">
+    <div class="eyebrow ry">Architecture</div>
+    <h2 class="stack-h ry">
+      Five layers.<br>
+      <span class="serif-i gt">One publishing OS.</span>
+    </h2>
+    <p class="stack-sub ry">
+      Built layer by layer over 8 years. Each one solves a problem the market left open.
+      Together, they close the entire gap between idea and income.
+    </p>
+
+    <div class="pipeline">
+
+      <div class="p-layer" data-layer="1">
+        <div class="p-node gold">✍️</div>
+        <div class="p-content">
+          <div class="p-label">Layer 01 — Pre-Production</div>
+          <div class="p-title">Story Studio</div>
+          <div class="p-desc">
+            A multi-agent creative tournament. Three AI writers compete — emotional arc, tension architecture, synthesis — then a JARVIS director agent selects and assembles the best output. Story bible, voice profiles, world laws, protected lines. Publication-ready audio drama script from any idea. In under one hour.
+          </div>
+          <div class="p-tags">
+            <span class="p-tag">Multi-agent tournament</span>
+            <span class="p-tag">Story Bible</span>
+            <span class="p-tag">Voice Profiles</span>
+            <span class="p-tag">Zero human refinement</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-layer" data-layer="2">
+        <div class="p-node violet">🎭</div>
+        <div class="p-content">
+          <div class="p-label">Layer 02 — Scripting</div>
+          <div class="p-title">Kinetic Notation System</div>
+          <div class="p-desc">
+            Scripts written for TTS engines, not human ears. Proprietary notation: [Archetype, Intensity, Stage] ((Kinetic Action)). Four axes of instruction — WHO the character is, HOW MUCH they express, WHERE in the arc, WHAT their body does acoustically. The engine gets a performance brief, not just text. That's why it sounds different.
+          </div>
+          <div class="p-tags">
+            <span class="p-tag">Kinetic notation</span>
+            <span class="p-tag">4-axis instruction</span>
+            <span class="p-tag">Proprietary system</span>
+            <span class="p-tag">Engine-level control</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-layer" data-layer="3">
+        <div class="p-node green">🔧</div>
+        <div class="p-content">
+          <div class="p-label">Layer 03 — Assembly</div>
+          <div class="p-title">Dialogue Assembly Engine</div>
+          <div class="p-desc">
+            Voice-agnostic. Bring character audio from any TTS source — ElevenLabs, Murf, Resemble, anything. Whisper transcription provides millisecond timestamps. VAD detects silence for clean splice points. Script numbering maps every line to its cut. Reorders, sequences, and stitches automatically. What took 12 hours in Audacity takes minutes.
+          </div>
+          <div class="p-tags">
+            <span class="p-tag">Whisper alignment</span>
+            <span class="p-tag">VAD splice detection</span>
+            <span class="p-tag">Voice-agnostic</span>
+            <span class="p-tag">Script-sequenced</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-layer" data-layer="4">
+        <div class="p-node blue">🎚️</div>
+        <div class="p-content">
+          <div class="p-label">Layer 04 — Post-Production</div>
+          <div class="p-title">iHack Audio v3.1</div>
+          <div class="p-desc">
+            Multi-pass forensic pipeline. Groq Whisper transcription → RMS/VAD/spectrogram analysis → JSON boundary constraint → cut selection → zero-crossing snap → ripple shift. ACX-spec output. Broadcast-ready mastering. Every title scored against 12 production dimensions and delivered with a forensic audit report.
+          </div>
+          <div class="p-tags">
+            <span class="p-tag">ACX-spec output</span>
+            <span class="p-tag">Zero-crossing snap</span>
+            <span class="p-tag">Forensic audit</span>
+            <span class="p-tag">48kHz/24-bit</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-layer" data-layer="5">
+        <div class="p-node red">🤖</div>
+        <div class="p-content">
+          <div class="p-label">Layer 05 — Orchestration</div>
+          <div class="p-title">J.A.R.V.I.S.</div>
+          <div class="p-desc">
+            Voice-controlled automation layer. Duplex streaming. Multi-agent swarm: analytical, creative, synthesis. Real filesystem mutation from voice commands. Cross-session memory via JSON rehydration. CSIP guard protocol. Complete author workflow — script retrieval through TTS through QC through distribution — entirely by voice. Laptop closed.
+          </div>
+          <div class="p-tags">
+            <span class="p-tag">Voice-controlled</span>
+            <span class="p-tag">Duplex streaming</span>
+            <span class="p-tag">Full automation</span>
+            <span class="p-tag">End-to-end</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     C4: LIVE OUTPUT
+═══════════════════════════════════════════════ -->
+<section id="output">
+  <div class="wrap">
+    <div class="eyebrow ry">Live productions</div>
+    <h2 class="output-h ry">
+      Not demos.<br>
+      <span class="serif-i gt">Real titles. Real output.</span>
+    </h2>
+    <p class="output-sub ry">
+      Every production below was scripted, assembled, mastered, and distributed using the stack above.
+      No studio. No invoice. No compromise.
+    </p>
+
+    <div class="productions">
+
+      <div class="prod-card g">
+        <div class="prod-score">PRODUCTION SCORE <span class="prod-score-val">9.5/10</span></div>
+        <div class="prod-title">THE CREATOR</div>
+        <div class="prod-ep">1 EPISODE · PSYCHOLOGICAL SCI-FI</div>
+        <div class="prod-desc">
+          The first live output of Story Studio. A psychological sci-fi audiobook exploring the tension between creation and control. Proved the pipeline end-to-end: zero human script refinement, cinematic voice performance, ACX-spec master.
+        </div>
+        <div class="prod-tags">
+          <span class="prod-tag gold">Story Studio v1</span>
+          <span class="prod-tag green">ACX-Ready</span>
+          <span class="prod-tag">Apple Podcasts</span>
+        </div>
+      </div>
+
+      <div class="prod-card v">
+        <div class="prod-score">PRODUCTION SCORE <span class="prod-score-val">9.8/10</span></div>
+        <div class="prod-title">SHERLOCK HOLMES: THE MISSING JULIET</div>
+        <div class="prod-ep">3 EPISODES · THRILLER · AUDIO DRAMA</div>
+        <div class="prod-desc">
+          A collision of Victorian deduction and Veronese conspiracy. Six distinct character voices, kinetic notation-scripted, assembled via Dialogue Assembly Engine. Holmes whispers "Juliet" before Romeo speaks her name.
+        </div>
+        <div class="prod-tags">
+          <span class="prod-tag gold">Kinetic Notation</span>
+          <span class="prod-tag violet">Multi-character</span>
+          <span class="prod-tag green">In Production</span>
+        </div>
+      </div>
+
+      <div class="prod-card gr">
+        <div class="prod-score">PRODUCTION SCORE <span class="prod-score-val">9.2/10</span></div>
+        <div class="prod-title">CHARLOTTE HOLMES</div>
+        <div class="prod-ep">3 EPISODES · DRAMA SERIES</div>
+        <div class="prod-desc">
+          A gender-flipped reimagining of the Holmes universe. Three-episode series demonstrating sustained character arc consistency across multi-session production. Broadcast-ready on Apple Podcasts.
+        </div>
+        <div class="prod-tags">
+          <span class="prod-tag">Series format</span>
+          <span class="prod-tag gold">Apple Podcasts</span>
+          <span class="prod-tag green">Complete</span>
+        </div>
+      </div>
+
+      <div class="prod-card g">
+        <div class="prod-score">PRODUCTION SCORE <span class="prod-score-val">9.0/10</span></div>
+        <div class="prod-title">GURU</div>
+        <div class="prod-ep">2 EPISODES · PHILOSOPHICAL DRAMA</div>
+        <div class="prod-desc">
+          A deeply introspective audio drama testing the stack's range beyond thriller and sci-fi. Philosophical density, lyrical cadence, atmospheric sound design. Demonstrates genre versatility.
+        </div>
+        <div class="prod-tags">
+          <span class="prod-tag">High-end Drama</span>
+          <span class="prod-tag gold">Cinematic Sound</span>
+          <span class="prod-tag">Apple Podcasts</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:2rem;text-align:center;">
+      <a href="https://podcasts.apple.com/us/podcast/ihack-audio-ai-audio-production-for-podcasters-audiobook/id1851081502" target="_blank" class="btn btn-outline">
+        Listen on Apple Podcasts →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     C5: IDENTITY FLIP
+═══════════════════════════════════════════════ -->
+<section id="identity">
+  <div class="flip-eye ry">Full disclosure</div>
+  <h2 class="flip-h ry">
+    One person.<br>
+    <span class="serif-i gt">Two identities.</span>
+  </h2>
+  <p class="flip-body ry">
+    The human side writes stories. The architect side writes systems. Hover to see both.
+  </p>
+
+  <div class="card-scene" onclick="window.location.href='https://ihackaudio.github.io/Website/'">
+    <div class="card-inner">
+      <div class="card-f">
+        <span class="face-ico">🎙️</span>
+        <div class="face-lbl">Producer</div>
+        <div class="face-sub">Stories · Emotion · Voice</div>
+        <div class="face-detail">
+          8 years in professional audio. Every production is a creative decision, not a template output.
+        </div>
+        <div class="face-cta">Hover to meet the architect →</div>
+      </div>
+      <div class="card-b">
+        <span class="face-ico">⚙️</span>
+        <div class="face-lbl">Architect</div>
+        <div class="face-sub">Systems · Pipelines · Code</div>
+        <div class="face-detail">
+          Built a 5-layer publishing OS on free-tier APIs. No GPU. No funding. No team. Just architecture.
+        </div>
+        <div class="face-cta" style="color:var(--gold)">Click to see the full machine →</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     C6: TRACTION
+═══════════════════════════════════════════════ -->
+<section id="traction">
+  <div class="wrap">
+    <div class="eyebrow ry">Proof of work</div>
+    <h2 class="tract-h ry">
+      Built different.<br>
+      <span class="serif-i gt">Proven different.</span>
+    </h2>
+    <p class="tract-sub ry">
+      Every number below came from building, not pitching.
+    </p>
+
+    <div class="bento">
+
+      <div class="bb bb-hero">
+        <span class="b-ico">🔬</span>
+        <div class="b-stat">Proprietary</div>
+        <div class="b-ttl">Kinetic Notation System</div>
+        <div class="b-dsc">
+          Most AI audio tools hand you a voice and wish you luck. This is a proprietary four-axis scripting engine — [Archetype, Intensity, Stage] ((Kinetic Action)) — that tells TTS engines what to do physically and acoustically. Not emotion labels. Not generic prompts. Engine-level performance instructions. That's the architectural gap nobody else has closed.
+        </div>
+        <div class="b-bars">
+          <div class="b-bar-row">
+            <div class="b-bar-label">Production</div>
+            <div class="b-bar-track"><div class="b-bar-fill" data-width="95"></div></div>
+            <div class="b-bar-val">9.5</div>
+          </div>
+          <div class="b-bar-row">
+            <div class="b-bar-label">Voice Perf</div>
+            <div class="b-bar-track"><div class="b-bar-fill violet" data-width="98"></div></div>
+            <div class="b-bar-val" style="color:var(--violet)">9.8</div>
+          </div>
+          <div class="b-bar-row">
+            <div class="b-bar-label">Sound Design</div>
+            <div class="b-bar-track"><div class="b-bar-fill green" data-width="92"></div></div>
+            <div class="b-bar-val" style="color:var(--green)">9.2</div>
+          </div>
+        </div>
+        <span class="b-badge">Custom Architecture</span>
+      </div>
+
+      <div class="bb bb-sm1">
+        <span class="b-ico">⚡</span>
+        <div class="b-stat">8</div>
+        <div class="b-ttl">Years Pro Audio</div>
+        <div class="b-dsc">Real audio engineering before AI made it fashionable. The ears were trained long before the stack was built.</div>
+      </div>
+
+      <div class="bb bb-sm2">
+        <span class="b-ico">🏆</span>
+        <div class="b-stat-sm">900+</div>
+        <div class="b-ttl">Upwork Hours · Top Rated</div>
+        <div class="b-dsc">Real clients. Real briefs. Real delivery. Not vibes.</div>
+      </div>
+
+      <div class="bb bb-sm3">
+        <span class="b-ico">🎙️</span>
+        <div class="b-stat-sm">#1</div>
+        <div class="b-ttl">Apple Podcasts — AI Audio</div>
+        <div class="b-dsc">Top search result. Zero ad spend. Just quality and consistency.</div>
+      </div>
+
+      <div class="bb bb-sm4">
+        <span class="b-ico">💰</span>
+        <div class="b-stat-sm">$0</div>
+        <div class="b-ttl">Infrastructure Cost</div>
+        <div class="b-dsc">Entire publishing OS runs on free-tier APIs. That's architecture, not poverty.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     C7: PRICING
+═══════════════════════════════════════════════ -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="eyebrow ry">Investment</div>
+    <h2 class="pr-h ry">
+      No mystery fees.<br>
+      <span class="serif-i gt">No surprises.</span>
+    </h2>
+    <p class="pr-sub ry">
+      Every project includes scripting, full production, and a forensic quality audit. Delivered on your schedule.
+    </p>
+
+    <div class="pr-grid">
+      <div class="pc">
+        <div class="pc-eye">Recurring</div>
+        <div class="pc-name">Podcast Production</div>
+        <div class="pc-amt">$500<sub>–700/mo</sub></div>
+        <div class="pc-note">4 cinematic episodes · ~40 finished minutes per month</div>
+        <ul class="pc-list">
+          <li>Script written and TTS-optimized for your audience</li>
+          <li>Cinematic narration — not robotic recitation</li>
+          <li>Full sound design per episode</li>
+          <li>Broadcast-ready mastering at ACX spec</li>
+          <li>Forensic quality audit on every file</li>
+          <li>Delivered to your schedule, every month</li>
+        </ul>
+        <a href="#contact" class="btn btn-outline" style="display:block;text-align:center">Start the conversation →</a>
+      </div>
+
+      <div class="pc hot">
+        <div class="pc-eye">Per Title</div>
+        <div class="pc-name">Audiobook Production</div>
+        <div class="pc-amt">$1,000<sub> first title</sub></div>
+        <div class="pc-note">Then $500 per finished hour · ongoing rate</div>
+        <ul class="pc-list">
+          <li>Full manuscript TTS script optimization via kinetic notation</li>
+          <li>Multi-character voice casting and director-level instruction</li>
+          <li>Cinematic sound design and atmospheric soundscaping</li>
+          <li>Forensic quality audit — scored across 12 dimensions</li>
+          <li>ACX / Audible / Apple / distribution ready</li>
+          <li>You retain all rights. Your story stays yours.</li>
+        </ul>
+        <a href="#contact" class="btn btn-gold" style="display:block;text-align:center">Tell me your story →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     C8: CONTACT
+═══════════════════════════════════════════════ -->
+<section id="contact">
+  <div class="wrap-sm">
+    <div class="eyebrow ry">Commission a title</div>
+    <h2 class="ct-h ry">
+      Tell me your story.<br>
+      <span class="serif-i gt">I'll handle everything else.</span>
+    </h2>
+    <p class="ct-sub ry">
+      Sample render within one business day. No commitment required.
+      Bring an idea, a manuscript, or a voice memo at 2am — it all counts.
+    </p>
+
+    <form class="form ry" id="contactForm">
+      <div class="f-row">
+        <div class="f-g">
+          <label class="f-lbl">Your name</label>
+          <input type="text" class="f-in" placeholder="What do I call you?" required>
+        </div>
+        <div class="f-g">
+          <label class="f-lbl">Email</label>
+          <input type="email" class="f-in" placeholder="Where do I send the sample?" required>
+        </div>
+      </div>
+      <div class="f-g">
+        <label class="f-lbl">What are we making?</label>
+        <select class="f-sel">
+          <option value="">Choose your format</option>
+          <option>Audiobook — I have a manuscript ready</option>
+          <option>Audiobook — I have an idea, nothing written</option>
+          <option>Podcast series — ongoing production</option>
+          <option>Personal story / memoir</option>
+          <option>Not sure yet — let's talk first</option>
+        </select>
+      </div>
+      <div class="f-g">
+        <label class="f-lbl">Tell me about your story</label>
+        <textarea class="f-ta" placeholder="What's it about? Where are you in the process? Don't overthink it — just talk." required></textarea>
+      </div>
+      <button type="submit" class="btn btn-gold" style="align-self:flex-start">Send it →</button>
+    </form>
+    <div id="ok">Received. Sample render within one business day. ✓</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fl">
+    <a href="https://podcasts.apple.com/us/podcast/ihack-audio-ai-audio-production-for-podcasters-audiobook/id1851081502" target="_blank">Apple Podcasts</a>
+    <a href="https://youtube.com/@ihackaudio" target="_blank">YouTube</a>
+    <a href="https://bd.linkedin.com/in/shahnamhossainpodcasteditor" target="_blank">LinkedIn</a>
+    <a href="https://ihackaudio.github.io/Website/" target="_blank">Architect Portfolio</a>
+    <a href="mailto:iHackaudio@gmail.com">Email</a>
+  </div>
+  <div class="fc">
+    © 2026 iHack Audio · Shahnam Jilan · Dhaka, Bangladesh<br>
+    <em>Built from scratch. Spent nothing. Sounds like everything.</em>
+  </div>
+</footer>
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════════
+   GSAP INIT
+═══════════════════════════════════════════════ */
+gsap.registerPlugin(ScrollTrigger);
+
+/* ─── NAV scroll ─── */
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+/* ─── Custom cursor ─── */
+const dot = document.getElementById('cursorDot');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+(function animCursor() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  dot.style.left = mx + 'px';
+  dot.style.top = my + 'px';
+  dot.style.transform = 'translate(-50%,-50%)';
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  ring.style.transform = 'translate(-50%,-50%)';
+  requestAnimationFrame(animCursor);
+})();
+
+/* ─── HERO sequence (no button — auto-fires) ─── */
+const heroTl = gsap.timeline({ delay: 0.3 });
+
+// Orbs
+heroTl.to('.orb', { opacity: 1, duration: 2, stagger: 0.4, ease: 'power2.out' }, 0);
+
+// Badge
+heroTl.to('#hBadge', { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' }, 0.4);
+
+// Headline lines — each word slides up from clip
+heroTl.to('.h-line-inner', {
+  y: '0%',
+  duration: 1,
+  stagger: 0.18,
+  ease: 'power4.out'
+}, 0.7);
+
+// Sub + buttons
+heroTl.to('#hSub', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, 1.4);
+heroTl.to('#hBtns', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, 1.65);
+
+// Dossier stream
+heroTl.to('#heroDossier', { opacity: 1, duration: 0.5 }, 1.8);
+
+// Dossier lines — stagger type-reveal
+const dLines = document.querySelectorAll('.hero-dossier .d-line');
+dLines.forEach((line, i) => {
+  heroTl.fromTo(line, { opacity: 0 }, { opacity: 1, duration: 0.2 }, 1.9 + i * 0.12);
+});
+
+// Score ring
+heroTl.to('#heroScore', { opacity: 1, duration: 0.6 }, 2.8);
+heroTl.call(() => {
+  const fill = document.getElementById('scoreRingFill');
+  // 9.5/10 = 95% of 163 circumference
+  fill.style.strokeDashoffset = 163 - (163 * 0.95);
+}, [], 2.9);
+
+// Scroll cue
+heroTl.to('#scrollCue', { opacity: 1, duration: 0.5 }, 3.2);
+
+/* ─── Eyebrows ─── */
+gsap.utils.toArray('.eyebrow').forEach(el => {
+  gsap.to(el, {
+    opacity: 1,
+    y: 0,
+    duration: 0.6,
+    ease: 'power2.out',
+    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+  });
+});
+
+/* ─── Problem section ─── */
+gsap.to('.prob-h', {
+  opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+  scrollTrigger: { trigger: '.prob-h', start: 'top 85%' }
+});
+gsap.to('.prob-sub', {
+  opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.15,
+  scrollTrigger: { trigger: '.prob-sub', start: 'top 88%' }
+});
+gsap.to('.ch-col', {
+  opacity: 1, x: 0, duration: 0.8, stagger: 0.2, ease: 'power3.out',
+  scrollTrigger: { trigger: '.chain-wrap', start: 'top 82%' }
+});
+gsap.to('.vs', {
+  opacity: 1, duration: 0.5,
+  scrollTrigger: { trigger: '.chain-wrap', start: 'top 82%' }
+});
+
+/* ─── Stack section ─── */
+gsap.to('.stack-h', {
+  opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+  scrollTrigger: { trigger: '.stack-h', start: 'top 85%' }
+});
+gsap.to('.stack-sub', {
+  opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+  scrollTrigger: { trigger: '.stack-sub', start: 'top 88%' }
+});
+gsap.utils.toArray('.p-layer').forEach((layer, i) => {
+  gsap.to(layer, {
+    opacity: 1, x: 0, duration: 0.7, ease: 'power3.out',
+    scrollTrigger: { trigger: layer, start: 'top 85%', toggleActions: 'play none none none' }
+  });
+});
+
+/* ─── Output section ─── */
+gsap.to('.output-h', {
+  opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+  scrollTrigger: { trigger: '.output-h', start: 'top 85%' }
+});
+gsap.to('.output-sub', {
+  opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+  scrollTrigger: { trigger: '.output-sub', start: 'top 88%' }
+});
+gsap.utils.toArray('.prod-card').forEach((card, i) => {
+  gsap.to(card, {
+    opacity: 1, y: 0, duration: 0.6, delay: i * 0.12, ease: 'power2.out',
+    scrollTrigger: { trigger: '.productions', start: 'top 82%' }
+  });
+});
+
+/* ─── Identity section ─── */
+gsap.to('.flip-eye', {
+  opacity: 1, duration: 0.5,
+  scrollTrigger: { trigger: '#identity', start: 'top 85%' }
+});
+gsap.to('.flip-h', {
+  opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', delay: 0.15,
+  scrollTrigger: { trigger: '#identity', start: 'top 85%' }
+});
+gsap.to('.flip-body', {
+  opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.3,
+  scrollTrigger: { trigger: '#identity', start: 'top 85%' }
+});
+
+/* ─── Traction section ─── */
+gsap.to('.tract-h', {
+  opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+  scrollTrigger: { trigger: '.tract-h', start: 'top 85%' }
+});
+gsap.to('.tract-sub', {
+  opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+  scrollTrigger: { trigger: '.tract-sub', start: 'top 88%' }
+});
+gsap.utils.toArray('.bb').forEach((bb, i) => {
+  gsap.to(bb, {
+    opacity: 1, y: 0, duration: 0.6, delay: i * 0.08, ease: 'power2.out',
+    scrollTrigger: { trigger: '.bento', start: 'top 82%' }
+  });
+});
+
+/* ─── Bar meters ─── */
+ScrollTrigger.create({
+  trigger: '.bento',
+  start: 'top 75%',
+  onEnter: () => {
+    document.querySelectorAll('.b-bar-fill').forEach(bar => {
+      bar.style.width = bar.dataset.width + '%';
+    });
+  }
+});
+
+/* ─── Pricing ─── */
+gsap.to('.pr-h', {
+  opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+  scrollTrigger: { trigger: '.pr-h', start: 'top 85%' }
+});
+gsap.to('.pr-sub', {
+  opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+  scrollTrigger: { trigger: '.pr-sub', start: 'top 88%' }
+});
+gsap.utils.toArray('.pc').forEach((pc, i) => {
+  gsap.to(pc, {
+    opacity: 1, y: 0, duration: 0.7, delay: i * 0.15, ease: 'power2.out',
+    scrollTrigger: { trigger: '.pr-grid', start: 'top 82%' }
+  });
+});
+
+/* ─── Contact ─── */
+gsap.to('.ct-h', {
+  opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+  scrollTrigger: { trigger: '.ct-h', start: 'top 85%' }
+});
+gsap.to('.ct-sub', {
+  opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
+  scrollTrigger: { trigger: '.ct-sub', start: 'top 88%' }
+});
+gsap.to('.form', {
+  opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.2,
+  scrollTrigger: { trigger: '.form', start: 'top 88%' }
+});
+
+/* ─── Form submit ─── */
+document.getElementById('contactForm').addEventListener('submit', e => {
+  e.preventDefault();
+  e.target.style.display = 'none';
+  document.getElementById('ok').style.display = 'block';
+});
+
+/* ─── Magnetic buttons ─── */
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const x = e.clientX - r.left - r.width / 2;
+    const y = e.clientY - r.top - r.height / 2;
+    btn.style.transform = `translate(${x * 0.12}px, ${y * 0.18}px)`;
+  });
+  btn.addEventListener('mouseleave', () => {
+    btn.style.transform = '';
+  });
+});
+</script>
+
+<audio id="whooshSfx" src="assets/audio/whoosh.mp3" preload="auto"></audio>
+</body>
+</html>
