@@ -507,6 +507,14 @@ footer{padding:2.5rem 2rem;text-align:center;border-top:1px solid var(--border)}
 .ry{opacity:0;transform:translateY(28px)}
 .rx{opacity:0;transform:translateX(-28px)}
 
+/* ═══ PAGE TRANSITION ═══ */
+.page-transition-overlay{position:fixed;inset:0;z-index:10000;pointer-events:none;background:#000;opacity:0}
+.page-transition-flash{position:fixed;inset:0;z-index:10001;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,rgba(232,168,56,0.6) 0%,rgba(232,168,56,0.1) 40%,transparent 70%)}
+.page-transition-streak{position:fixed;top:0;bottom:0;width:120px;z-index:10002;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent,rgba(232,168,56,0.4),rgba(255,255,255,0.8),rgba(232,168,56,0.4),transparent);filter:blur(8px)}
+.page-enter-overlay{position:fixed;inset:0;z-index:10000;pointer-events:none;background:#000;opacity:1}
+.page-enter-flash{position:fixed;inset:0;z-index:10001;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,rgba(56,189,248,0.5) 0%,rgba(56,189,248,0.08) 40%,transparent 70%)}
+.page-enter-streak{position:fixed;top:0;bottom:0;width:120px;z-index:10002;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent,rgba(56,189,248,0.3),rgba(255,255,255,0.7),rgba(56,189,248,0.3),transparent);filter:blur(8px)}
+
 /* MOBILE */
 @media(max-width:900px){
   .chain-wrap{grid-template-columns:1fr;gap:1rem}
@@ -540,7 +548,7 @@ footer{padding:2.5rem 2rem;text-align:center;border-top:1px solid var(--border)}
     <a href="#samples" class="nav-link">Samples</a>
     <a href="#pricing" class="nav-link">Pricing</a>
     <a href="#contact" class="nav-link">Contact</a>
-    <a href="index.html" class="nav-machine">See the machine →</a>
+    <a href="index.html" class="nav-machine" onclick="event.preventDefault();cinematicTransition('index.html')">See the machine →</a>
   </div>
 </nav>
 
@@ -719,7 +727,7 @@ footer{padding:2.5rem 2rem;text-align:center;border-top:1px solid var(--border)}
   <p class="flip-body ry">This is my human side. There's an architect on the other side of this card.</p>
 
   <div class="card-scene-link ry">
-    <div class="card-scene" onclick="window.location.href='index.html'" style="cursor:pointer">
+    <div class="card-scene" onclick="cinematicTransition('index.html')" style="cursor:pointer">
       <div class="card-inner">
         <div class="card-f">
           <span class="face-ico">👤</span>
@@ -873,7 +881,7 @@ footer{padding:2.5rem 2rem;text-align:center;border-top:1px solid var(--border)}
     <a href="https://podcasts.apple.com/us/podcast/ihack-audio-ai-audio-production-for-podcasters-audiobook/id1851081502" target="_blank">Apple Podcasts</a>
     <a href="https://youtube.com/@ihackaudio" target="_blank">YouTube</a>
     <a href="https://bd.linkedin.com/in/shahnamhossainpodcasteditor" target="_blank">LinkedIn</a>
-    <a href="index.html" target="_blank">Architect Portfolio</a>
+    <a href="index.html" onclick="event.preventDefault();cinematicTransition('index.html')">Architect Portfolio</a>
     <a href="mailto:iHackaudio@gmail.com">Email</a>
   </div>
   <div class="fc">
@@ -1058,6 +1066,65 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
   });
 });
+
+// ═══ CINEMATIC PAGE TRANSITION ═══
+function cinematicTransition(url) {
+  const overlay = document.createElement('div');
+  overlay.className = 'page-transition-overlay';
+  document.body.appendChild(overlay);
+
+  const flash = document.createElement('div');
+  flash.className = 'page-transition-flash';
+  document.body.appendChild(flash);
+
+  const streak = document.createElement('div');
+  streak.className = 'page-transition-streak';
+  document.body.appendChild(streak);
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      sessionStorage.setItem('cinematic-enter', '1');
+      window.location.href = url;
+    }
+  });
+
+  // ACT 1: Fade to black
+  tl.to(overlay, { opacity: 1, duration: 0.5, ease: 'power3.in' })
+
+  // ACT 2: Gold streak sweeps
+  .to(streak, {
+    opacity: 1, x: window.innerWidth + 200,
+    duration: 0.5, ease: 'power2.inOut'
+  }, '-=0.2')
+  .to(flash, { opacity: 1, duration: 0.15, ease: 'power4.in' }, '-=0.25')
+  .to(flash, { opacity: 0, duration: 0.3, ease: 'power2.out' }, '>');
+}
+
+// ═══ CINEMATIC ENTER (on page load) ═══
+if (sessionStorage.getItem('cinematic-enter') === '1') {
+  sessionStorage.removeItem('cinematic-enter');
+
+  const enterOverlay = document.createElement('div');
+  enterOverlay.className = 'page-enter-overlay';
+  document.body.appendChild(enterOverlay);
+
+  const enterFlash = document.createElement('div');
+  enterFlash.className = 'page-enter-flash';
+  document.body.appendChild(enterFlash);
+
+  const enterStreak = document.createElement('div');
+  enterStreak.className = 'page-enter-streak';
+  document.body.appendChild(enterStreak);
+  gsap.set(enterStreak, { x: window.innerWidth + 200 });
+
+  gsap.timeline({
+    onComplete: () => { enterOverlay.remove(); enterFlash.remove(); enterStreak.remove(); }
+  })
+  .to(enterStreak, { opacity: 1, x: -200, duration: 0.5, ease: 'power2.inOut', delay: 0.1 })
+  .to(enterFlash, { opacity: 1, duration: 0.15, ease: 'power4.in' }, '-=0.25')
+  .to(enterFlash, { opacity: 0, duration: 0.5, ease: 'power2.out' }, '>')
+  .to(enterOverlay, { opacity: 0, duration: 0.4, ease: 'power2.out' }, '<');
+}
 </script>
 </body>
 </html>

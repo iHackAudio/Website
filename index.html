@@ -202,6 +202,16 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
 .reveal-delay-2{transition-delay:0.2s}
 .reveal-delay-3{transition-delay:0.3s}
 
+/* ═══ PAGE TRANSITION ═══ */
+.page-transition-overlay{position:fixed;inset:0;z-index:10000;pointer-events:none;background:#000;opacity:0}
+.page-transition-flash{position:fixed;inset:0;z-index:10001;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,rgba(56,189,248,0.5) 0%,rgba(56,189,248,0.08) 40%,transparent 70%)}
+.page-transition-streak{position:fixed;top:0;bottom:0;width:120px;z-index:10002;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent,rgba(56,189,248,0.3),rgba(255,255,255,0.7),rgba(56,189,248,0.3),transparent);filter:blur(8px)}
+.page-enter-overlay{position:fixed;inset:0;z-index:10000;pointer-events:none;background:#000;opacity:1}
+.page-enter-flash{position:fixed;inset:0;z-index:10001;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,rgba(232,168,56,0.6) 0%,rgba(232,168,56,0.1) 40%,transparent 70%)}
+.page-enter-streak{position:fixed;top:0;bottom:0;width:120px;z-index:10002;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent,rgba(232,168,56,0.4),rgba(255,255,255,0.8),rgba(232,168,56,0.4),transparent);filter:blur(8px)}
+.nav-human{font-family:var(--mono);font-size:11px;padding:8px 18px;border:1px solid var(--gold);color:var(--gold);transition:var(--transition);text-decoration:none}
+.nav-human:hover{background:var(--gold);color:var(--bg-0);box-shadow:var(--glow-gold)}
+
 /* RESPONSIVE */
 @media(max-width:900px){
   nav{padding:0 20px}
@@ -246,6 +256,7 @@ footer{padding:28px 60px;border-top:1px solid var(--border);display:flex;justify
     <li><a href="#stack">Stack</a></li>
     <li><a href="#experience">Experience</a></li>
   </ul>
+  <a href="Untitled-1.html" class="nav-human" onclick="event.preventDefault();cinematicTransition('Untitled-1.html')">← See the Human</a>
   <a href="#contact" class="nav-cta">Contact</a>
   <button class="nav-mobile" onclick="document.querySelector('.nav-links').classList.toggle('show')" aria-label="Menu">☰</button>
 </nav>
@@ -640,6 +651,49 @@ function toggleAudio(icon) {
 document.addEventListener('click', (e) => {
   if (!e.target.closest('nav')) document.querySelector('.nav-links')?.classList.remove('show');
 });
+
+// ═══ CINEMATIC PAGE TRANSITION ═══
+function cinematicTransition(url) {
+  const overlay = document.createElement('div');
+  overlay.className = 'page-transition-overlay';
+  document.body.appendChild(overlay);
+  const flash = document.createElement('div');
+  flash.className = 'page-transition-flash';
+  document.body.appendChild(flash);
+  const streak = document.createElement('div');
+  streak.className = 'page-transition-streak';
+  document.body.appendChild(streak);
+  const tl = gsap.timeline({
+    onComplete: () => {
+      sessionStorage.setItem('cinematic-enter', '1');
+      window.location.href = url;
+    }
+  });
+  tl.to(overlay, { opacity: 1, duration: 0.5, ease: 'power3.in' })
+    .to(streak, { opacity: 1, x: window.innerWidth + 200, duration: 0.5, ease: 'power2.inOut' }, '-=0.2')
+    .to(flash, { opacity: 1, duration: 0.15, ease: 'power4.in' }, '-=0.25')
+    .to(flash, { opacity: 0, duration: 0.3, ease: 'power2.out' }, '>');
+}
+if (sessionStorage.getItem('cinematic-enter') === '1') {
+  sessionStorage.removeItem('cinematic-enter');
+  const enterOverlay = document.createElement('div');
+  enterOverlay.className = 'page-enter-overlay';
+  document.body.appendChild(enterOverlay);
+  const enterFlash = document.createElement('div');
+  enterFlash.className = 'page-enter-flash';
+  document.body.appendChild(enterFlash);
+  const enterStreak = document.createElement('div');
+  enterStreak.className = 'page-enter-streak';
+  document.body.appendChild(enterStreak);
+  gsap.set(enterStreak, { x: -200 });
+  gsap.timeline({
+    onComplete: () => { enterOverlay.remove(); enterFlash.remove(); enterStreak.remove(); }
+  })
+  .to(enterStreak, { opacity: 1, x: window.innerWidth + 200, duration: 0.5, ease: 'power2.inOut', delay: 0.1 })
+  .to(enterFlash, { opacity: 1, duration: 0.15, ease: 'power4.in' }, '-=0.25')
+  .to(enterFlash, { opacity: 0, duration: 0.5, ease: 'power2.out' }, '>')
+  .to(enterOverlay, { opacity: 0, duration: 0.4, ease: 'power2.out' }, '<');
+}
 </script>
 </body>
 </html>
