@@ -1416,50 +1416,28 @@ gsap.set('.h-lines', { autoAlpha: 1 });
 document.addEventListener('DOMContentLoaded', startHero);
 
 // ── MATCHMEDIA: DESKTOP-ONLY SCROLL ANIMATIONS ──
-mm.add('(min-width: 800px)', () => {
-  // Side A scroll reveals
-  gsap.utils.toArray('.ry').forEach(el => {
-    gsap.to(el, {
-      opacity: 1, y: 0, duration: 0.7, ease: 'power2.out',
-      scrollTrigger: { trigger: el, start: 'top 82%' }
+function setupSideAScrollAnimations() {
+  if (window.innerWidth >= 800) {
+    gsap.utils.toArray('#side-a .ry').forEach(el => {
+      gsap.to(el, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 82%' } });
     });
-  });
-  gsap.utils.toArray('.rx').forEach(el => {
-    gsap.to(el, {
-      opacity: 1, x: 0, duration: 0.7, ease: 'power2.out',
-      scrollTrigger: { trigger: el, start: 'top 82%' }
+    gsap.utils.toArray('#side-a .rx').forEach(el => {
+      gsap.to(el, { opacity: 1, x: 0, duration: 0.7, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 82%' } });
     });
-  });
-  gsap.utils.toArray('.rx-r').forEach(el => {
-    gsap.to(el, {
-      opacity: 1, x: 0, duration: 0.7, ease: 'power2.out',
-      scrollTrigger: { trigger: el, start: 'top 82%' }
+    gsap.utils.toArray('#side-a .rx-r').forEach(el => {
+      gsap.to(el, { opacity: 1, x: 0, duration: 0.7, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 82%' } });
     });
-  });
-
-  // Staggered reveals
-  ScrollTrigger.batch('.s-card', {
-    onEnter: b => gsap.to(b, { opacity: 1, scale: 1, stagger: 0.16, duration: 0.7, ease: 'back.out(1.3)' }),
-    start: 'top 78%'
-  });
-  ScrollTrigger.batch('.pill', {
-    onEnter: b => gsap.to(b, { opacity: 1, x: 0, stagger: 0.08, duration: 0.5, ease: 'power2.out' }),
-    start: 'top 85%'
-  });
-  ScrollTrigger.batch('.pc', {
-    onEnter: b => gsap.to(b, { opacity: 1, y: 0, stagger: 0.2, duration: 0.65, ease: 'power2.out' }),
-    start: 'top 78%'
-  });
-});
-
-// ── MATCHMEDIA: MOBILE — instant reveals, no scroll animations ──
-mm.add('(max-width: 799px)', () => {
-  // On mobile, just show everything immediately
-  gsap.set('.ry, .rx, .rx-r', { opacity: 1, x: 0, y: 0 });
-  gsap.set('.s-card', { opacity: 1, scale: 1 });
-  gsap.set('.pill', { opacity: 1, x: 0 });
-  gsap.set('.pc', { opacity: 1, y: 0 });
-});
+    ScrollTrigger.batch('#side-a .s-card', { onEnter: b => gsap.to(b, { opacity: 1, scale: 1, stagger: 0.16, duration: 0.7, ease: 'back.out(1.3)' }), start: 'top 78%' });
+    ScrollTrigger.batch('#side-a .pill', { onEnter: b => gsap.to(b, { opacity: 1, x: 0, stagger: 0.08, duration: 0.5, ease: 'power2.out' }), start: 'top 85%' });
+    ScrollTrigger.batch('#side-a .pc', { onEnter: b => gsap.to(b, { opacity: 1, y: 0, stagger: 0.2, duration: 0.65, ease: 'power2.out' }), start: 'top 78%' });
+  } else {
+    gsap.set('#side-a .ry, #side-a .rx, #side-a .rx-r', { opacity: 1, x: 0, y: 0 });
+    gsap.set('#side-a .s-card', { opacity: 1, scale: 1 });
+    gsap.set('#side-a .pill', { opacity: 1, x: 0 });
+    gsap.set('#side-a .pc', { opacity: 1, y: 0 });
+  }
+}
+setupSideAScrollAnimations();
 
 // ── PIVOT CARD — CLICK TO FLIP THE ENTIRE PAGE ──
 
@@ -1545,24 +1523,25 @@ function switchTab(target) {
   document.getElementById('dotA').classList.toggle('active', target === 'a');
   document.getElementById('dotB').classList.toggle('active', target === 'b');
 
-  // Reset ALL reveal elements in the target side
-  const side = target === 'a' ? '#side-a' : '#side-b';
-  const revealEls = document.querySelectorAll(side + ' .reveal, ' + side + ' .ry, ' + side + ' .rx, ' + side + ' .rx-r');
-  revealEls.forEach(el => {
+  // Kill all GSAP ScrollTriggers and reset reveals
+  ScrollTrigger.getAll().forEach(t => t.kill());
+  gsap.globalTimeline.clear();
+
+  // Reset ALL reveal elements in both sides
+  document.querySelectorAll('.reveal, .ry, .rx, .rx-r, .s-card, .pill, .pc, .sample-card, .bb').forEach(el => {
     el.classList.remove('visible');
-    // Reset GSAP inline styles so reveal can re-trigger
-    gsap.set(el, { clearProps: 'opacity,transform' });
+    el.style.opacity = '';
+    el.style.transform = '';
   });
 
-  // Re-observe reveals
+  // Re-setup animations for the target side
   requestAnimationFrame(() => {
     if (target === 'b') {
       initSideBReveals();
       initNumberCountUp();
     } else {
-      initSideAReveals();
+      setupSideAScrollAnimations();
     }
-    // Refresh GSAP ScrollTrigger
     ScrollTrigger.refresh();
   });
 
@@ -1628,7 +1607,6 @@ function initNumberCountUp() {
 }
 
 // ── INITIALIZE REVEALS (Side A on load) ──
-initSideAReveals();
 
 // ── AUDIO — Synthesized flip whoosh + mute toggle ──
 let audioCtx = null;
