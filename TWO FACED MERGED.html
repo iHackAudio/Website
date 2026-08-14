@@ -193,12 +193,33 @@ body.flipped #muteToggle{
   background:rgba(3,7,18,0.8);
 }
 /* When flipped: front becomes inaccessible, back becomes active */
-body.flipped .page-front{
-  pointer-events:none;
+/* TAB SYSTEM */
+#side-b-wrap{display:none}
+body.on-b #side-a-wrap{display:none}
+body.on-b #side-b-wrap{display:block}
+body.on-b #nav-a{display:none}
+body.on-b #nav-b{display:flex}
+#nav-b{display:none}
+
+/* NAV B STYLES */
+#nav-b{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:1.1rem 2.5rem;
+  align-items:center;justify-content:space-between;
+  background:rgba(6,10,20,0.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--b-bord);
 }
-body.flipped .page-back{
-  pointer-events:all;
-}
+.nav-logo-b-wrap{display:flex;align-items:center;gap:10px}
+.nav-logo-b-wrap img{height:28px;width:auto}
+.nav-logo-b-wrap span{font-family:var(--b-mono);font-size:13px;color:var(--b-t1);letter-spacing:.5px}
+.nav-links-b-inner{display:flex;align-items:center;gap:28px}
+.nav-link-b{font-family:var(--b-mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--b-t4);text-decoration:none;transition:var(--transition)}
+.nav-link-b:hover{color:var(--b-accent)}
+.nav-cta-b{font-family:var(--b-mono);font-size:11px;padding:8px 18px;border:1px solid var(--b-accent);color:var(--b-accent);transition:var(--transition);text-decoration:none}
+.nav-cta-b:hover{background:var(--b-accent);color:var(--b-bg)}
+.nav-human-btn{font-family:var(--b-mono);font-size:11px;padding:8px 18px;border:1px solid var(--a-gold);color:var(--a-gold);transition:var(--transition);text-decoration:none;cursor:pointer;background:none}
+.nav-human-btn:hover{background:var(--a-gold);color:#080604}
 
 /* Flip overlay — dramatic flash during transition */
 .flip-overlay{
@@ -843,15 +864,23 @@ footer{
       <a href="#how" class="nav-link nav-link-hide">How it works</a>
       <a href="#pricing" class="nav-link nav-link-hide">Pricing</a>
       <a href="#contact-a" class="nav-link nav-link-hide">Contact</a>
-      <a href="#pivot" class="nav-pill">See the Architect →</a>
+      <a href="#" class="nav-pill" onclick="event.preventDefault();switchTab('b')">See the Architect →</a>
     </div>
-    <ul class="nav-links-b">
-      <li><a href="#b-builds">Builds</a></li>
-      <li><a href="#b-stack">Stack</a></li>
-      <li><a href="#b-experience">Experience</a></li>
-      <a href="#b-contact" class="nav-cta-b">Contact</a>
-      <a href="#" class="nav-cta-b" id="flipBackBtn" style="border-color:var(--a-gold);color:var(--a-gold)">← See the Human</a>
-    </ul>
+  </div>
+</nav>
+
+<!-- NAV B — THE ARCHITECT -->
+<nav id="nav-b">
+  <div class="nav-logo-b-wrap">
+    <img src="assets/images/ihack-logo.png" alt="iHack Audio">
+    <span>Shahnam Jilan</span>
+  </div>
+  <div class="nav-links-b-inner">
+    <a href="#b-builds" class="nav-link-b">Builds</a>
+    <a href="#b-stack" class="nav-link-b">Stack</a>
+    <a href="#b-experience" class="nav-link-b">Experience</a>
+    <a href="#b-contact" class="nav-cta-b">Contact</a>
+    <a href="#" class="nav-human-btn" onclick="event.preventDefault();switchTab('a')">← See the Human</a>
   </div>
 </nav>
 
@@ -872,8 +901,7 @@ footer{
      Front = Side A (Human)
      Back  = Side B (Architect)
 ═══════════════════════════════════════ -->
-<div class="page-flipper" id="pageFlipper">
-<div class="page-face page-front" id="pageFront">
+<div id="side-a-wrap">
 
 <!-- ──────────────────────────────────────────
      SIDE A — THE HUMAN / STORYTELLER
@@ -1097,12 +1125,12 @@ footer{
   </a>
 </section>
 
-</div><!-- /page-front -->
+</div><!-- /side-a-wrap -->
 
 <!-- ═══════════════════════════════════════
      BACK FACE — SIDE B (Architect)
 ═══════════════════════════════════════ -->
-<div class="page-face page-back" id="pageBack">
+<div id="side-b-wrap">
 
 <!-- ──────────────────────────────────────────
      SIDE B — THE ARCHITECT
@@ -1325,12 +1353,11 @@ footer{
   <p class="b-section-eyebrow reveal" style="justify-content:center">The other side</p>
   <h2 class="b-section-title reveal" style="text-align:center">Want to see the storyteller?</h2>
   <div class="reveal" style="margin-top:2rem">
-    <a href="#" class="b-btn-secondary" id="flipBackBtnBottom">← Flip back to the Human</a>
+    <a href="#" class="b-btn-secondary" onclick="event.preventDefault();switchTab('a')">← Flip back to the Human</a>
   </div>
 </section>
 
-</div><!-- /page-back -->
-</div><!-- /page-flipper -->
+</div><!-- /side-b-wrap -->
 
 <!-- FOOTER -->
 <footer>
@@ -1355,15 +1382,11 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
 // ── GSAP CONTEXT — automatic cleanup for all animations ──
 let ctx;
 
-// ── NAV SCROLL + MODE SWITCH ──
+// ── NAV SCROLL ──
 const nav = document.getElementById('mainNav');
-const pivot = document.getElementById('pivot');
-const sideB = document.getElementById('side-b');
 
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 50);
-  const pivotBottom = pivot.getBoundingClientRect().bottom;
-  nav.classList.toggle('arch-mode', pivotBottom < 0);
 }, { passive: true });
 
 // ── GSAP MATCHMEDIA — responsive animation scoping ──
@@ -1439,11 +1462,7 @@ mm.add('(max-width: 799px)', () => {
 });
 
 // ── PIVOT CARD — CLICK TO FLIP THE ENTIRE PAGE ──
-const pageFlipper = document.getElementById('pageFlipper');
-const pageFront = document.getElementById('pageFront');
-const pageBack = document.getElementById('pageBack');
-let isFlipped = false;
-let isFlipping = false;
+
 
 function spawnFlipParticles(color) {
   const container = document.createElement('div');
@@ -1509,263 +1528,107 @@ function scrambleText(el, finalText) {
 }
 
 document.getElementById('pivotCard').addEventListener('click', function() {
-  if (isFlipping) return;
-  isFlipping = true;
-
-  if (!isFlipped) {
-    flipToSideB();
-  } else {
-    flipToSideA();
-  }
+  switchTab('b');
 });
 
-function flipToSideB() {
-  initAudio();
-  playFlipSound('forward');
-  document.body.classList.add('flipping');
+// ═══ TAB SWITCHING SYSTEM ═══
+let currentTab = 'a';
 
-  // Reduced motion: instant switch
-  if (prefersReducedMotion) {
-    gsap.set(pageFront, { rotateY: -180, scale: 0.95 });
-    gsap.set(pageBack, { rotateY: 0, scale: 1 });
-    pageBack.style.pointerEvents = 'all';
-    isFlipped = true;
-    isFlipping = false;
-    document.body.classList.remove('flipping');
-    document.body.classList.add('flipped');
-    nav.classList.add('arch-mode');
-    window.scrollTo(0, 0);
-    updateDots();
-    document.querySelectorAll('#side-b .reveal').forEach(el => revealObs.observe(el));
-    return;
-  }
+function switchTab(target) {
+  if (currentTab === target) return;
+  currentTab = target;
 
-  // Cinematic overlay elements
-  const overlay = document.createElement('div');
-  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;pointer-events:none;background:#000;opacity:0';
-  document.body.appendChild(overlay);
+  // Toggle body class
+  document.body.classList.toggle('on-b', target === 'b');
 
-  const flash = document.createElement('div');
-  flash.style.cssText = 'position:fixed;inset:0;z-index:10000;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,rgba(232,168,56,0.6) 0%,rgba(232,168,56,0.1) 40%,transparent 70%)';
-  document.body.appendChild(flash);
+  // Update dots
+  document.getElementById('dotA').classList.toggle('active', target === 'a');
+  document.getElementById('dotB').classList.toggle('active', target === 'b');
 
-  const streak = document.createElement('div');
-  streak.style.cssText = 'position:fixed;top:0;bottom:0;width:120px;z-index:10001;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent,rgba(232,168,56,0.4),rgba(255,255,255,0.8),rgba(232,168,56,0.4),transparent);filter:blur(8px)';
-  document.body.appendChild(streak);
+  // Reset ALL reveal elements in the target side
+  const side = target === 'a' ? '#side-a' : '#side-b';
+  const revealEls = document.querySelectorAll(side + ' .reveal, ' + side + ' .ry, ' + side + ' .rx, ' + side + ' .rx-r');
+  revealEls.forEach(el => {
+    el.classList.remove('visible');
+    // Reset GSAP inline styles so reveal can re-trigger
+    gsap.set(el, { clearProps: 'opacity,transform' });
+  });
 
-  spawnFlipParticles('gold');
-
-  const tl = gsap.timeline({
-    onComplete: () => {
-      isFlipped = true;
-      isFlipping = false;
-      document.body.classList.remove('flipping');
-      document.body.classList.add('flipped');
-      overlay.remove();
-      flash.remove();
-      streak.remove();
-      window.scrollTo(0, 0);
-      updateDots();
-      document.querySelectorAll('#side-b .reveal').forEach(el => revealObs.observe(el));
+  // Re-observe reveals
+  requestAnimationFrame(() => {
+    if (target === 'b') {
+      initSideBReveals();
+      initNumberCountUp();
+    } else {
+      initSideAReveals();
     }
+    // Refresh GSAP ScrollTrigger
+    ScrollTrigger.refresh();
   });
 
-  // ACT 1: The Fade — page dims and shrinks, world goes dark
-  tl.to(pageFront, {
-    scale: 0.92,
-    filter: 'brightness(0.3) blur(2px)',
-    duration: 0.5,
-    ease: 'power3.in'
-  })
-  .to(overlay, { opacity: 1, duration: 0.4, ease: 'power2.in' }, '<+0.1')
-
-  // ACT 2: The Flip — rotation happens in the dark, unseen
-  .set(pageFront, { rotateY: -180, force3D: true })
-  .set(pageBack, { rotateY: 0, scale: 0.92, filter: 'brightness(0) blur(4px)', force3D: true,
-    onStart: () => { pageBack.style.pointerEvents = 'all'; }
-  })
-
-  // ACT 3: The Flash — light streak sweeps across, new page revealed
-  .to(streak, {
-    opacity: 1, x: window.innerWidth + 200,
-    duration: 0.5,
-    ease: 'power2.inOut'
-  }, '+=0.05')
-  .to(flash, { opacity: 1, duration: 0.15, ease: 'power4.in' }, '<+0.15')
-  .to(flash, { opacity: 0, duration: 0.6, ease: 'power2.out' }, '>')
-
-  // ACT 4: The Reveal — new page emerges from the light
-  .to(overlay, { opacity: 0, duration: 0.4, ease: 'power2.out' }, '<')
-  .to(pageBack, {
-    scale: 1,
-    filter: 'brightness(1) blur(0px)',
-    duration: 0.7,
-    ease: 'power3.out'
-  }, '<')
-  .to(streak, { opacity: 0, duration: 0.3, ease: 'power2.in' }, '<+0.1')
-  .to(pageFront, { filter: 'brightness(1) blur(0px)', duration: 0.01 }, '<')
-
-  // Nav mode switch
-  .call(() => { nav.classList.add('arch-mode'); }, [], 0.6);
+  // Scroll to top
+  window.scrollTo(0, 0);
 }
 
-function flipToSideA() {
-  initAudio();
-  playFlipSound('backward');
-  document.body.classList.add('flipping');
+// Side indicator dots
+document.getElementById('dotA').addEventListener('click', () => switchTab('a'));
+document.getElementById('dotB').addEventListener('click', () => switchTab('b'));
 
-  // Reduced motion: instant switch
-  if (prefersReducedMotion) {
-    gsap.set(pageBack, { rotateY: 180, scale: 1 });
-    gsap.set(pageFront, { rotateY: 0, scale: 1 });
-    pageBack.style.pointerEvents = 'none';
-    pageFront.style.pointerEvents = 'all';
-    isFlipped = false;
-    isFlipping = false;
-    document.body.classList.remove('flipping');
-    document.body.classList.remove('flipped');
-    nav.classList.remove('arch-mode');
-    window.scrollTo(0, 0);
-    updateDots();
-    return;
-  }
-
-  // Cinematic overlay elements
-  const overlay = document.createElement('div');
-  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;pointer-events:none;background:#000;opacity:0';
-  document.body.appendChild(overlay);
-
-  const flash = document.createElement('div');
-  flash.style.cssText = 'position:fixed;inset:0;z-index:10000;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,rgba(56,189,248,0.5) 0%,rgba(56,189,248,0.08) 40%,transparent 70%)';
-  document.body.appendChild(flash);
-
-  const streak = document.createElement('div');
-  streak.style.cssText = 'position:fixed;top:0;bottom:0;width:120px;z-index:10001;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent,rgba(56,189,248,0.3),rgba(255,255,255,0.7),rgba(56,189,248,0.3),transparent);filter:blur(8px)';
-  document.body.appendChild(streak);
-  gsap.set(streak, { x: window.innerWidth + 200 });
-
-  spawnFlipParticles('blue');
-
-  const tl = gsap.timeline({
-    onComplete: () => {
-      isFlipped = false;
-      isFlipping = false;
-      document.body.classList.remove('flipping');
-      document.body.classList.remove('flipped');
-      gsap.set(pageFront, { rotateY: 0, scale: 1, filter: 'none' });
-      gsap.set(pageBack, { rotateY: 180, scale: 1, filter: 'none' });
-      pageBack.style.pointerEvents = 'none';
-      pageFront.style.pointerEvents = 'all';
-      overlay.remove();
-      flash.remove();
-      streak.remove();
-      nav.classList.remove('arch-mode');
-      window.scrollTo(0, 0);
-      updateDots();
-    }
-  });
-
-  // ACT 1: Fade to black
-  tl.to(pageBack, {
-    scale: 0.92,
-    filter: 'brightness(0.3) blur(2px)',
-    duration: 0.5,
-    ease: 'power3.in'
-  })
-  .to(overlay, { opacity: 1, duration: 0.4, ease: 'power2.in' }, '<+0.1')
-
-  // ACT 2: Hidden swap
-  .set(pageBack, { rotateY: 180, force3D: true })
-  .set(pageFront, { rotateY: 0, scale: 0.92, filter: 'brightness(0) blur(4px)', force3D: true,
-    onStart: () => { pageFront.style.pointerEvents = 'all'; }
-  })
-
-  // ACT 3: Blue streak + flash
-  .to(streak, {
-    opacity: 1, x: -200,
-    duration: 0.5,
-    ease: 'power2.inOut'
-  }, '+=0.05')
-  .to(flash, { opacity: 1, duration: 0.15, ease: 'power4.in' }, '<+0.15')
-  .to(flash, { opacity: 0, duration: 0.6, ease: 'power2.out' }, '>')
-
-  // ACT 4: Reveal the warm side
-  .to(overlay, { opacity: 0, duration: 0.4, ease: 'power2.out' }, '<')
-  .to(pageFront, {
-    scale: 1,
-    filter: 'brightness(1) blur(0px)',
-    duration: 0.7,
-    ease: 'power3.out'
-  }, '<')
-  .to(streak, { opacity: 0, duration: 0.3, ease: 'power2.in' }, '<+0.1')
-  .to(pageBack, { filter: 'brightness(1) blur(0px)', duration: 0.01 }, '<');
+// Side A reveals
+function initSideAReveals() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('#side-a .reveal').forEach(el => obs.observe(el));
 }
 
-// Wire up nav pill and scroll links to trigger flip
-const archLinks = document.querySelectorAll('a[href="#pivot"], .pivot-scroll');
-archLinks.forEach(link => {
-  link.addEventListener('click', function(e) {
-    e.preventDefault();
-    pivot.scrollIntoView({ behavior: 'smooth' });
-    setTimeout(() => {
-      if (!isFlipped && !isFlipping) flipToSideB();
-    }, 600);
-  });
-});
-
-// Flip back button in Side B nav
-document.getElementById('flipBackBtn').addEventListener('click', function(e) {
-  e.preventDefault();
-  if (isFlipped && !isFlipping) flipToSideA();
-});
-// Flip back button at bottom of Side B
-document.getElementById('flipBackBtnBottom').addEventListener('click', function(e) {
-  e.preventDefault();
-  if (isFlipped && !isFlipping) flipToSideA();
-});
-
-// Side indicator dots — click to flip
-document.getElementById('dotA').addEventListener('click', function() {
-  if (isFlipped && !isFlipping) flipToSideA();
-});
-document.getElementById('dotB').addEventListener('click', function() {
-  if (!isFlipped && !isFlipping) flipToSideB();
-});
-// Update dots during flip
-function updateDots() {
-  document.getElementById('dotA').classList.toggle('active', !isFlipped);
-  document.getElementById('dotB').classList.toggle('active', isFlipped);
+// Side B reveals
+function initSideBReveals() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('#side-b .reveal').forEach(el => obs.observe(el));
 }
 
-// ── SIDE B REVEALS (IntersectionObserver) ──
-const revealObs = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+// Side B number count-up
+function initNumberCountUp() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target;
+      const target = parseInt(el.dataset.target);
+      if (!target) return;
+      const suffix = el.dataset.suffix || '';
+      const duration = 1800;
+      const start = performance.now();
+      const anim = now => {
+        const p = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(eased * target).toLocaleString() + suffix;
+        if (p < 1) requestAnimationFrame(anim);
+      };
+      requestAnimationFrame(anim);
+      obs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('#side-b .b-number-val[data-target]').forEach(el => {
+    el.textContent = '0'; // reset
+    obs.observe(el);
   });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+}
 
-// Number count-up
-const numObs = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    const el = e.target;
-    const target = parseInt(el.dataset.target);
-    if (!target) return;
-    const suffix = el.dataset.suffix || '';
-    const duration = 1800;
-    const start = performance.now();
-    const anim = now => {
-      const p = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(eased * target).toLocaleString() + suffix;
-      if (p < 1) requestAnimationFrame(anim);
-    };
-    requestAnimationFrame(anim);
-    numObs.unobserve(el);
-  });
-}, { threshold: 0.5 });
-document.querySelectorAll('.b-number-val[data-target]').forEach(el => numObs.observe(el));
+// ── INITIALIZE REVEALS (Side A on load) ──
+initSideAReveals();
 
 // ── AUDIO — Synthesized flip whoosh + mute toggle ──
 let audioCtx = null;
