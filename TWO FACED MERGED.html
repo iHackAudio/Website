@@ -1480,10 +1480,9 @@ document.getElementById('pivotCard').addEventListener('click', function() {
 function flipToSideB() {
   initAudio();
   playFlipSound('forward');
-  spawnFlipParticles('gold');
   document.body.classList.add('flipping');
 
-  // Reduced motion: instant switch, no animation
+  // Reduced motion: instant switch
   if (prefersReducedMotion) {
     gsap.set(pageFront, { rotateY: -180, scale: 0.95 });
     gsap.set(pageBack, { rotateY: 0, scale: 1 });
@@ -1499,57 +1498,78 @@ function flipToSideB() {
     return;
   }
 
+  // Cinematic overlay elements
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;pointer-events:none;background:#000;opacity:0';
+  document.body.appendChild(overlay);
+
+  const flash = document.createElement('div');
+  flash.style.cssText = 'position:fixed;inset:0;z-index:10000;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,rgba(232,168,56,0.6) 0%,rgba(232,168,56,0.1) 40%,transparent 70%)';
+  document.body.appendChild(flash);
+
+  const streak = document.createElement('div');
+  streak.style.cssText = 'position:fixed;top:0;bottom:0;width:120px;z-index:10001;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent,rgba(232,168,56,0.4),rgba(255,255,255,0.8),rgba(232,168,56,0.4),transparent);filter:blur(8px)';
+  document.body.appendChild(streak);
+
+  spawnFlipParticles('gold');
+
   const tl = gsap.timeline({
     onComplete: () => {
       isFlipped = true;
       isFlipping = false;
       document.body.classList.remove('flipping');
       document.body.classList.add('flipped');
+      overlay.remove();
+      flash.remove();
+      streak.remove();
       window.scrollTo(0, 0);
       updateDots();
-      document.querySelectorAll('#side-b .reveal').forEach(el => {
-        revealObs.observe(el);
-      });
+      document.querySelectorAll('#side-b .reveal').forEach(el => revealObs.observe(el));
     }
   });
 
+  // ACT 1: The Fade — page dims and shrinks, world goes dark
   tl.to(pageFront, {
-    scale: 0.95,
-    duration: 0.3,
-    ease: 'power2.in',
-    force3D: true
+    scale: 0.92,
+    filter: 'brightness(0.3) blur(2px)',
+    duration: 0.5,
+    ease: 'power3.in'
   })
-  .to(pageFront, {
-    rotateY: -180,
-    duration: 1.0,
-    ease: 'power3.inOut',
-    force3D: true,
-    onStart: () => {
-      pageBack.style.pointerEvents = 'all';
-      gsap.set(pageBack, { rotateY: 0 });
-    }
-  }, '-=0.1')
-  .to(pageBack, {
-    rotateY: 0,
-    duration: 1.0,
-    ease: 'power3.inOut',
-    force3D: true
-  }, '<')
+  .to(overlay, { opacity: 1, duration: 0.4, ease: 'power2.in' }, '<+0.1')
+
+  // ACT 2: The Flip — rotation happens in the dark, unseen
+  .set(pageFront, { rotateY: -180, force3D: true })
+  .set(pageBack, { rotateY: 0, scale: 0.92, filter: 'brightness(0) blur(4px)', force3D: true,
+    onStart: () => { pageBack.style.pointerEvents = 'all'; }
+  })
+
+  // ACT 3: The Flash — light streak sweeps across, new page revealed
+  .to(streak, {
+    opacity: 1, x: window.innerWidth + 200,
+    duration: 0.5,
+    ease: 'power2.inOut'
+  }, '+=0.05')
+  .to(flash, { opacity: 1, duration: 0.15, ease: 'power4.in' }, '<+0.15')
+  .to(flash, { opacity: 0, duration: 0.6, ease: 'power2.out' }, '>')
+
+  // ACT 4: The Reveal — new page emerges from the light
+  .to(overlay, { opacity: 0, duration: 0.4, ease: 'power2.out' }, '<')
   .to(pageBack, {
     scale: 1,
-    duration: 0.3,
-    ease: 'power2.out',
-    force3D: true
-  }, '-=0.2')
-  .call(() => {
-    nav.classList.add('arch-mode');
-  }, [], 0.5);
+    filter: 'brightness(1) blur(0px)',
+    duration: 0.7,
+    ease: 'power3.out'
+  }, '<')
+  .to(streak, { opacity: 0, duration: 0.3, ease: 'power2.in' }, '<+0.1')
+  .to(pageFront, { filter: 'brightness(1) blur(0px)', duration: 0.01 }, '<')
+
+  // Nav mode switch
+  .call(() => { nav.classList.add('arch-mode'); }, [], 0.6);
 }
 
 function flipToSideA() {
   initAudio();
   playFlipSound('backward');
-  spawnFlipParticles('blue');
   document.body.classList.add('flipping');
 
   // Reduced motion: instant switch
@@ -1568,48 +1588,75 @@ function flipToSideA() {
     return;
   }
 
+  // Cinematic overlay elements
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;pointer-events:none;background:#000;opacity:0';
+  document.body.appendChild(overlay);
+
+  const flash = document.createElement('div');
+  flash.style.cssText = 'position:fixed;inset:0;z-index:10000;pointer-events:none;opacity:0;background:radial-gradient(ellipse at center,rgba(56,189,248,0.5) 0%,rgba(56,189,248,0.08) 40%,transparent 70%)';
+  document.body.appendChild(flash);
+
+  const streak = document.createElement('div');
+  streak.style.cssText = 'position:fixed;top:0;bottom:0;width:120px;z-index:10001;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent,rgba(56,189,248,0.3),rgba(255,255,255,0.7),rgba(56,189,248,0.3),transparent);filter:blur(8px)';
+  document.body.appendChild(streak);
+  gsap.set(streak, { x: window.innerWidth + 200 });
+
+  spawnFlipParticles('blue');
+
   const tl = gsap.timeline({
     onComplete: () => {
       isFlipped = false;
       isFlipping = false;
       document.body.classList.remove('flipping');
       document.body.classList.remove('flipped');
-      gsap.set(pageFront, { rotateY: 0, scale: 1 });
-      gsap.set(pageBack, { rotateY: 180, scale: 1 });
+      gsap.set(pageFront, { rotateY: 0, scale: 1, filter: 'none' });
+      gsap.set(pageBack, { rotateY: 180, scale: 1, filter: 'none' });
       pageBack.style.pointerEvents = 'none';
+      pageFront.style.pointerEvents = 'all';
+      overlay.remove();
+      flash.remove();
+      streak.remove();
       nav.classList.remove('arch-mode');
       window.scrollTo(0, 0);
       updateDots();
     }
   });
 
+  // ACT 1: Fade to black
   tl.to(pageBack, {
-    scale: 0.95,
-    duration: 0.3,
-    ease: 'power2.in',
-    force3D: true
+    scale: 0.92,
+    filter: 'brightness(0.3) blur(2px)',
+    duration: 0.5,
+    ease: 'power3.in'
   })
-  .to(pageBack, {
-    rotateY: 180,
-    duration: 1.0,
-    ease: 'power3.inOut',
-    force3D: true
-  }, '-=0.1')
-  .to(pageFront, {
-    rotateY: 0,
-    duration: 1.0,
-    ease: 'power3.inOut',
-    force3D: true,
-    onStart: () => {
-      pageFront.style.pointerEvents = 'all';
-    }
-  }, '<')
+  .to(overlay, { opacity: 1, duration: 0.4, ease: 'power2.in' }, '<+0.1')
+
+  // ACT 2: Hidden swap
+  .set(pageBack, { rotateY: 180, force3D: true })
+  .set(pageFront, { rotateY: 0, scale: 0.92, filter: 'brightness(0) blur(4px)', force3D: true,
+    onStart: () => { pageFront.style.pointerEvents = 'all'; }
+  })
+
+  // ACT 3: Blue streak + flash
+  .to(streak, {
+    opacity: 1, x: -200,
+    duration: 0.5,
+    ease: 'power2.inOut'
+  }, '+=0.05')
+  .to(flash, { opacity: 1, duration: 0.15, ease: 'power4.in' }, '<+0.15')
+  .to(flash, { opacity: 0, duration: 0.6, ease: 'power2.out' }, '>')
+
+  // ACT 4: Reveal the warm side
+  .to(overlay, { opacity: 0, duration: 0.4, ease: 'power2.out' }, '<')
   .to(pageFront, {
     scale: 1,
-    duration: 0.3,
-    ease: 'power2.out',
-    force3D: true
-  }, '-=0.2');
+    filter: 'brightness(1) blur(0px)',
+    duration: 0.7,
+    ease: 'power3.out'
+  }, '<')
+  .to(streak, { opacity: 0, duration: 0.3, ease: 'power2.in' }, '<+0.1')
+  .to(pageBack, { filter: 'brightness(1) blur(0px)', duration: 0.01 }, '<');
 }
 
 // Wire up nav pill and scroll links to trigger flip
